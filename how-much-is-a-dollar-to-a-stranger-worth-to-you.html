@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How much is a dollar to a stranger worth to you?</title>
+  <meta name="author" content="Drew Fox">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="How much is a dollar to a stranger worth to you? written March 31, 2013">
+
+  <link rel="canonical" href="/how-much-is-a-dollar-to-a-stranger-worth-to-you.html">
+
+
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+  <link href="/theme/css/bootstrap.min.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/screen.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/tomorrow.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+
+
+  <script>window.jQuery || document.write('<script src="/theme/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+  <script src="/theme/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+  <!-- <script src="/theme/javascripts/jquery.tweet.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/jquery.instagram.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/custom.js" type="text/javascript"></script>
+  -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  
+</head>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/theme/images/home.png"/>
+    </a>
+
+    <div class='my_backdrop'>
+
+<article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 my_junk">
+        <h1>How much is a dollar to a stranger worth to you?</h1>
+        <div class="meta">
+          written <time datetime="2013-03-31T22:24:00-07:00">March 31, 2013</time>
+        </div>
+        <br>
+            <p>One of the most important questions that faces our world is, How do we get people to be nice? This is a somewhat stupid question, but sits at the center of so many of the worlds problems. Joining the ranks of people brining science to this problem, my friend Nate and I created a game. <!--more--></p>
+<p>Our Self-Other Game is essentially a revealed preference dictator game. You can play the <a href="http://webtasks.keck.waisman.wisc.edu/self_other_demo/">Self-Other Game here.</a> At the end of the game, you can see a plot like this.</p>
+<p><img src="https://asfox.github.io/images/sos.png"></p>
+<p>This technique allows us to quantify each participants Indifference Point which represents how much a dollar to a stranger is worth to you, in dollars. We compute this value by fitting a logistic regression to each subjects choices and determining the 50% ratio, where the person is indifferent between a dollar for themselves or X dollars for a stranger.</p>
+<p>Actually, our game is a little more complicated than that. Check it out below if you wish. Id love to get feedback.</p>
+<h2 id="self-other-game-algorithm">Self-Other Game Algorithm<a class="headerlink" href="#self-other-game-algorithm" title="Permanent link">&para;</a></h2>
+<h4 id="step-1-participant-makes-a-choice">Step 1: Participant makes a choice.<a class="headerlink" href="#step-1-participant-makes-a-choice" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>Subjects make forced monetary decisions between money for themselves (\<span class="math">\(0-\\)</span>10) and money for a stranger (\<span class="math">\(0-\\)</span>10). To precisely quantify the amount of money an individual was willing to sacrice to give a dollar to a stranger (i.e. their indiference point or “IP”), we adaptively altered the ratio of the two others.</p>
+</blockquote>
+<p><img class="right" src="https://asfox.github.io/images/sogame-01.png"></p>
+<h4 id="step-2-estimate-an-indifference-point-ip">Step 2: Estimate an indifference point (IP).<a class="headerlink" href="#step-2-estimate-an-indifference-point-ip" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>
+<div class="math">$$ \begin{aligned} C_{1:t} = \frac{1}{1+e^{ \alpha+\beta [ln(OR_{1:t})]}} \end{aligned} $$</div>
+C<sub>[1:t]</sub> is a vector of indicator variables {0,1} for each choice from the rst trial through the current trial (t), where ones indicate choices for self. OR is the other ratio for trial t. Using this model, we estimate α &amp; β. α is the parameter estimate to a constant. β is the parameter estimate of interest, and represents the weight applied to the other ratio. Using these parameters, we estimate indifference points from ln(-3) to ln(3).
+<div class="math">$$ IP = \frac{−\alpha}{\beta} $$</div>
+</p>
+</blockquote>
+<p><img class="right" src="https://asfox.github.io/images/sogame-02.png"></p>
+<h4 id="step-3-pick-a-ratio-based-on-a-normal-distribution-centered-around-the-participants-indifference-point-ip">Step 3: Pick a ratio based on a normal distribution centered around the participant’s indifference point (IP).<a class="headerlink" href="#step-3-pick-a-ratio-based-on-a-normal-distribution-centered-around-the-participants-indifference-point-ip" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>
+<div class="math">$$ \begin{aligned} OR_{t+1} &amp;\sim  \mathcal{N}(\mu=\hat{IP},\sigma^2=.25) \\\\ &amp;= P(OR_{t+1}) \\\\ &amp;=\frac{1}{.25\sqrt{2\pi}} e^{\left(\frac{-1}{2}\right)\left(\frac{x-\hat{IP}}{.25}\right)} \end{aligned} $$</div>
+In order to discourage gaming of the system, we also draw from a normal distribution centered around 0 ~50% of the time.
+<div class="math">$$ \begin{aligned} OR_{t+1} &amp;\sim  \mathcal{N}(\mu=0,\sigma^2=.25) \\\\ &amp;= P(OR_{t+1}) \\\\ &amp;=\frac{1}{.25\sqrt{2\pi}} e^{\left(\frac{-1}{2}\right)\left(\frac{x}{.25}\right)} \end{aligned} $$</div>
+</p>
+</blockquote>
+<p><img class="right" src="https://asfox.github.io/images/sogame-03.png"></p>
+<h4 id="step-4-randomly-pick-amounts-to-other-based-on-this-ratio-to-present-to-the-participant">Step 4: Randomly pick amounts to other based on this ratio to present to the participant.<a class="headerlink" href="#step-4-randomly-pick-amounts-to-other-based-on-this-ratio-to-present-to-the-participant" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>
+<div class="math">$$ A_{Self,t+1} \sim \mathcal{U} \left( \frac{.01}{\min(1,OR_t+1)}, \frac{.01}{\max(1,OR_t+1)}  \right) $$</div>
+<div class="math">$$ \\\\ A_{Other,t+1} = A_{Self,t+1} \times OR_{t+1} $$</div>
+</p>
+</blockquote>
+<p><img class="right" src="https://asfox.github.io/images/sogame-04.png"></p>
+<h4 id="wash-rinse-repeat">Wash, rinse, repeat.<a class="headerlink" href="#wash-rinse-repeat" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>Go back to Step 1.</p>
+</blockquote>
+<h2 id="wanna-know-more">Wanna know more?<a class="headerlink" href="#wanna-know-more" title="Permanent link">&para;</a></h2>
+<p>You can see what its like to be a participant in of our experiments, by playing for <a href="http://webtasks.keck.waisman.wisc.edu/self_other_demo/">yourself online.</a></p>
+<p>You can check out some data we collected by looking at the <a href="https://asfox.github.io/publications/foxAS_CNS_2011_reprint.pdf">poster I presented at CNS.</a></p>
+<p>Let me know if you have and questions or comments. :-D</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        <hr class="divider-short"/>
+        <!-- Disqus goes here -->
+        <!-- <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">Disqus goes here</div>
+        </section>
+        -->
+      </div>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    <footer id="footer" class="her-row">
+      <div class="container">
+
+<div class="row">
+  <div class="col-sm span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+
+           <li>
+             <a href="carly-m-drzewiecki.html">Carly M. Drzewiecki</a>
+           </li>
+           <li>
+             <a href="poirier-et-al-neuroimage-2021.html">Poirier et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="shackman-fox-ajp-2020.html">Shackman & Fox, AJP - 2020</a>
+           </li>
+           <li>
+             <a href="fox-et-al-neuroimage-2021.html">Fox et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="daniel-koh.html">Daniel Koh</a>
+           </li>
+    </ul>
+    <h2><a href="/archives">archives</a></h2>
+  </div>
+  <div class="col-sm span4">
+<h2>twitter</h2>
+
+<a class="twitter-timeline" data-dnt="true" data-height="300" href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw">Tweets by foxdotdrew</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<a href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-dnt="true" data-show-count="false">Follow @foxdotdrew</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </div>
+  <div class="col-sm span2">
+<div class="col-sm span2">
+  <h2>categories</h2>
+  <div class="meta" style="margin-bottom: 30px;">
+ 
+              <a href="/category/cv.html" class="category">cv (1)</a>
+ 
+              <a href="/category/news.html" class="category">news (3)</a>
+              <a href="/category/people.html" class="category">people (6)</a>
+ 
+              <a href="/category/posters.html" class="category">posters (48)</a>
+ 
+              <a href="/category/publications.html" class="category">publications (80)</a>
+ 
+              <a href="/category/thoughts.html" class="category">thoughts (6)</a>
+ 
+              <a href="/category/tutorials.html" class="category">tutorials (7)</a>
+  </div>
+
+
+  <p style="text-align: center;">
+  <a href="https://ds.lib.ucdavis.edu" rel="tooltip" title="DataLab UC Davis"><img title="DataLab UC Davis" alt="DataLab icon" width=100 height=100 src="https://asfox.github.io/images/datalab_centered-logo-full-color-rgb.png"></a>
+  </p>
+
+
+  <div class="social-icon-list">
+    <a title="Twitter" href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+    <a title="GitHub" href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+    <a title="E-Mail" href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+  </div>
+</div>
+
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/"><h4>Home</h4></a>
+          </div>
+
+          <div class="col-md-2">
+            <div class="social-icon-list">
+              <a href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+
+              <a href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+
+
+              <a href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+            </div>
+          </div>
+          <div class="pull-right">
+            <h4>Powered by <a href="http://blog.getpelican.com/">Pelican</a>. Originally designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a> and adapted by Drew Fox.</h4>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

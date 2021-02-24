@@ -1,0 +1,39 @@
+# program to run
+Executable = go_ants_nifti.sh
+
+# save log, output and error files
+Log = $(outputFile)_go_ants.log
+Error = $(outputFile)_go_ants.error
+Output = $(outputFile)_go_ants.output
+
+# housekeping
+Universe = vanilla
+notification = never
+should_transfer_files = yes
+when_to_transfer_output = ON_EXIT
+
+# Put the job on hold if it is taking longer than 5 hours...
+periodic_hold = (JobStatus == 2) && ((CurrentTime - EnteredCurrentStatus) > (60 * 60 * 5))
+
+# release any job that had an issue and got set to hold after 30 seconds, and run it on a different computer
+periodic_release = (JobStatus == 5) && ((CurrentTime - EnteredCurrentStatus) > 30) && (NumSystemHolds < 10)
+match_list_length = 5
+requirements = (TARGET.Name =!= LastMatchName1)
+
+# set some minimal requirements
+Requirements  = ( OpSys == "LINUX" && Arch =="X86_64" )    
+request_cpus = 1
+request_memory = 2000
+request_disk = 1000000
+
+# files to transfer to the execute node
+transfer_input_files = ANTS,ImageMath,N3BiasFieldCorrection,SetOrigin,WarpImageMultiTransform,$(templateFile),$(inputFile),$(maskFile)
+
+# files to transfer back when you are done
+transfer_output_files = $(outputAffine), $(outputWarp), $(outputFile)
+
+# command arguments to run... 
+Arguments = $(templateFile) $(inputFile) $(outputFile) $(maskFile)
+
+Queue
+

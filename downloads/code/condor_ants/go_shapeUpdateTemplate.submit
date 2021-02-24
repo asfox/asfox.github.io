@@ -1,0 +1,21 @@
+Executable = go_shapeUpdateTemplate.sh
+
+Log = go_shapeUpdateTemplate.log
+Error = go_shapeUpdateTemplate.error
+Output = go_shapeUpdateTemplate.output
+
+Universe = vanilla
+notification = never
+should_transfer_files = yes
+when_to_transfer_output = ON_EXIT
+
+Requirements  = ( OpSys == "LINUX" && Arch =="X86_64" )    
+
+transfer_input_files = SetOrigin,AverageImages,MultiplyImages,AverageAffineTransform,WarpImageMultiTransform,$(oldMask),$(RegisteredFiles),$(AffineFiles),$(WarpFiles)
+
+transfer_output_files = $(templateFile),$(newMask)
+
+Arguments = $(templateFile) toTemplate_ $(oldMask) $(newMask) 
+
+Queue
+

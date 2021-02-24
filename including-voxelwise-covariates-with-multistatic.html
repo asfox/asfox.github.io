@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Including Voxelwise Covariates with Multistatic</title>
+  <meta name="author" content="Drew Fox">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="Including Voxelwise Covariates with Multistatic written May 29, 2013">
+
+  <link rel="canonical" href="/including-voxelwise-covariates-with-multistatic.html">
+
+
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+  <link href="/theme/css/bootstrap.min.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/screen.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/tomorrow.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+
+
+  <script>window.jQuery || document.write('<script src="/theme/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+  <script src="/theme/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+  <!-- <script src="/theme/javascripts/jquery.tweet.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/jquery.instagram.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/custom.js" type="text/javascript"></script>
+  -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  
+</head>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/theme/images/home.png"/>
+    </a>
+
+    <div class='my_backdrop'>
+
+<article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 my_junk">
+        <h1>Including Voxelwise Covariates with Multistatic</h1>
+        <div class="meta">
+          written <time datetime="2013-05-29T14:56:00-07:00">May 29, 2013</time>
+        </div>
+        <br>
+            <p>As neuroimagers we are constantly using fancy tools to ensure that our voxelwise analyses are comparing amygdalas to amygdalas. Nevertheless, dispite our best efforts, individual differences in functional imaging findings can be driven by differences in brain anatomy or registration error rather than the <em>functional</em> differences that we set out to study. This confound lead me to work with <a href="mailto:troakes@gmail.com">Terry Oakes</a> to write <strong>multistatic.m</strong>.</p>
+<!--more -->
+
+<p>Multistatic builds on the late great Kieth Worsleys <a href="http://www.math.mcgill.ca/keith/fmristat/toolbox/multistat.m">multistat</a> to include a voxelwise covariate (the IC is for <em>include covariate</em>). This allows you use your VBM/DBM data as nuisance covariates in your functional analyses, as well as include any other voxelwise data in your regression model. We published a paper where we described this approach, <a href="https://asfox.github.io/publications/integratingVBMIntoTheGeneralLinearModelWithVoxelwiseAnatomicalCovariates_OakesFoxJohnstoneChungKalinDavidson.pdf">Integrating VBM into the General Linear Model with voxelwise anatomical covariates.</a></p>
+<p>I have been using this approach for years, and find it to be really helpful. It has prevented me from trying to publish a few false positives and helped me to identify some results that I later replicated. I am going to outline the pluses and minuses of this approach from a few different perspectives.</p>
+<h2 id="from-a-practical-perspective">From a practical perspective<a class="headerlink" href="#from-a-practical-perspective" title="Permanent link">&para;</a></h2>
+<p>Win. My experience is that it has allowed us to learn more from our data; I recommend it. The main downside is that it requires quality control of the anatomical data. That said, most people use the T1-based registrations for their functional data, leaving the only additional step to be segmentation (or computing deformation-summary values). As most packages offer a fairly reliable tool to perform these steps, it isnt too much work. It can take a little longer, but whats a little time in the name of science?</p>
+<h2 id="from-a-statistical-perspective">From a statistical perspective<a class="headerlink" href="#from-a-statistical-perspective" title="Permanent link">&para;</a></h2>
+<p>To be clear, I didnt do anything fancy.</p>
+<p>In standard neuroimaging analyses you usually fit a model to each voxel, and test a given <span class="math">\(\beta\)</span> value.
+</p>
+<div class="math">$$ Y = \beta \times X $$</div>
+<blockquote>
+<p><span class="math">\(Y\)</span> are the parameter esitmates from your first level analysis or individual subject data.
+<span class="math">\(\beta\)</span> are the paramter estimates for your across subject effects.
+<span class="math">\(X\)</span> is your design matrix, that describes your across subject analysis which is</p>
+</blockquote>
+<p>Multistat does this, SPM does this, FSL does this, multistatic also does this. The only difference in multistatic is that we append an additional column to the design matrix that varies from voxel to voxel, and estimate this beta.</p>
+<div class="math">$$ Y = \beta_{[1:k]} \times X_{[1:k]} + \beta_{k+1} \times X_{k+1} $$</div>
+<p>
+Where <span class="math">\(X_{[1:k]}\)</span> is the design matrix as above, and <span class="math">\(X_{k+1}\)</span> is the additional vector.</p>
+<p>In most cases, you can simply append a zero to your contrast matrix, unless you are interested in the effect of your voxelwise covariate on brain function (which is totally reasonable, and easy to test).</p>
+<p>The basic assumptions are no different than those when you perform a voxel-based morphometry (VBM) analysis (or a deformation based morphometry analysis) and a functional imaging analysis in the same dataset. The main downside is that you loose a degree of freedom at each voxel. Although the model that you are fitting at each voxel is slightly different, this should not alter the assumptions of intensity or resel-based multiple comparison correction.</p>
+<h2 id="from-a-computing-perspective">From a computing perspective<a class="headerlink" href="#from-a-computing-perspective" title="Permanent link">&para;</a></h2>
+<p>The downside of this analysis is that it takes longer. In particular, it requires a seperate matrix inversion of the design matrix at each voxel. This means that as the number of subjects increases this has an increasingly large effect on the time it takes to finish. I tend to run all of my across subject analyses with and without. If I find something that is only significant in one analysis, that generally means there I need to be <em>super careful</em> in my interpretation.</p>
+<p>To use my code, you will need to install <a href="http://www.math.mcgill.ca/keith/fmristat/">fmriStat</a> from Keith Worsleys website. Additionally, if you want to load Nifti files you will need to adapt fmristat with a few additional files, and install Worsleys <a href="http://www.math.mcgill.ca/keith/surfstat/">surfStat</a>, as listed on my page <a href="http://https://asfox.github.io/2013/05/30/read-nifti-in-fmristat/">Read Nifti in fmristat</a>.</p>
+<p>Here is the code. (You can download it by clicking the link to the top-right.)</p>
+<figure class='code'>
+<figcaption><span class="liquid-tags-code-title">MultistatIC Matlab Function codec:utf8</span><span class="liquid-tags-code-filename">asf_multistatic.m</span><a href='/downloads/code/asf_multistatic.m'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><code><span class="k">function</span> <span class="nf">df</span> <span class="p">=</span> <span class="n">asf_multistatic_multipleCovar</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">,</span> <span class="n">input_files_sd</span><span class="p">,</span> <span class="c">...</span>
+   <span class="n">df_data</span><span class="p">,</span> <span class="n">fwhm_data</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">contrast</span><span class="p">,</span> <span class="n">output_file_base</span><span class="p">,</span> <span class="c">...</span>
+   <span class="n">which_stats</span><span class="p">,</span> <span class="n">fwhm_varatio</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="n">df_limit</span><span class="p">,</span> <span class="n">covariate_files</span> <span class="p">)</span>
+
+<span class="c">%MULTISTAT fits a mixed effects linear model.</span>
+<span class="c">%</span>
+<span class="c">% Combines effects (E) and their standard errors (S) using a linear mixed </span>
+<span class="c">% effects model:     E = X b + e_fixed + e_random,     where</span>
+<span class="c">%    b is a vector of unknown coefficients,</span>
+<span class="c">%    e_fixed  is normal with mean zero, standard deviation S,</span>
+<span class="c">%    e_random is normal with mean zero, standard deviation sigma (unknown).</span>
+<span class="c">% The model is fitted by REML using the EM algorithm with NITER iterations. </span>
+<span class="c">%</span>
+<span class="c">% Gives the conjunction (minimum) of the random effects T stats for the data.</span>
+<span class="c">%</span>
+<span class="c">% Estimates the effective FWHM in mm of the residuals from the linear model,</span>
+<span class="c">% as if the residuals were white noise smoothed with a Gaussian filter </span>
+<span class="c">% whose fwhm was FWHM. Applies a first-order correction for small degrees </span>
+<span class="c">% of freedom and small FWHM relative to the voxel size. Great care has been</span>
+<span class="c">% taken to make sure that FWHM is unbiased, particularly for low df, so that</span>
+<span class="c">% if it is smoothed spatially then it remains unbiased. The bias in FWHM</span>
+<span class="c">% is less than 1/10 of the voxel size for FWHM &gt; 2*voxel size. However the </span>
+<span class="c">% continuity correction for small FWHM breaks down if FWHM &lt; voxel size,</span>
+<span class="c">% in which case FWHM is generally too large. If FWHM &gt; 50, FWHM = 50.</span>
+<span class="c">%</span>
+<span class="c">% WARNING: Multistat is very slow if the number of columns of X is more than </span>
+<span class="c">% 1 and less than the number of input files, and INPUT_FILES_SD is not empty,</span>
+<span class="c">% since it loops over voxels, rather than doing calculations in parallel.</span>
+<span class="c">% </span>
+<span class="c">% [DF DF_RESID] = MULTISTAT( INPUT_FILES_EF , INPUT_FILES_SD , </span>
+<span class="c">%           DF_DATA [, FWHM_DATA [, X [, </span>
+<span class="c">%           [, CONTRAST [, OUTPUT_FILE_BASE [, WHICH_STATS </span>
+<span class="c">%           [, FWHM_VARATIO [, NITER [, DF_LIMIT ]]]]]]]]] )</span>
+<span class="c">% </span>
+<span class="c">% INPUT_FILES_EF is the input fmri effect files, the dependent variables,</span>
+<span class="c">% usually the _ef.img or _ef.mnc files, padded with extra blanks if necessary; </span>
+<span class="c">% they will be removed before use.</span>
+<span class="c">% </span>
+<span class="c">% INPUT_FILES_SD is the input fmri sdeffect files, the standard</span>
+<span class="c">% deviations of the dependent variables, usually the _sd.img or _sd.mnc files,</span>
+<span class="c">% padded with extra blanks if necessary; they will be removed before use.</span>
+<span class="c">% If INPUT_FILES_SD=[], then INPUT_FILES_SD is assumed to be</span>
+<span class="c">% zero for all voxels, DF_DATA is set to Inf, and FWHM_VARATIO now</span>
+<span class="c">% smoothes the voxel sd. This allows multistat to duplicate DOT for </span>
+<span class="c">% analysing PET data (with smoothed voxel sd, rather than pooled sd).</span>
+<span class="c">% </span>
+<span class="c">% DF_DATA is the row vector of degrees of freedom of the input files.</span>
+<span class="c">% If empty (default), these are read from the headers of INPUT_FILES_SD.</span>
+<span class="c">%</span>
+<span class="c">% FWHM_DATA is the fwhm in mm of INPUT_FILES_EF. It is only  </span>
+<span class="c">% used to calculate the degrees of freedom, printed out at the beginning. </span>
+<span class="c">% If empty (default), it is estimated from the least-squares residuals,</span>
+<span class="c">% or it is read from the headers of INPUT_FILES_EF if available.</span>
+<span class="c">%</span>
+<span class="c">% X is the design matrix, whose rows are the files, and columns</span>
+<span class="c">% are the explanatory (independent) variables of interest. </span>
+<span class="c">% Default is X=[1; 1; 1; ..1] which just averages the files. If the</span>
+<span class="c">% rank of X equals the number of files, e.g. if X is square, then </span>
+<span class="c">% the random effects cannot be estinmated, but the fixed effects</span>
+<span class="c">% sd&#39;s can be used for the standard error. This is done very quickly.</span>
+<span class="c">% </span>
+<span class="c">% CONTRAST is a matrix whose rows are contrasts for the statistic images.</span>
+<span class="c">% Default is [1 0 ... 0], i.e. it picks out the first column of X.</span>
+<span class="c">% ASF-added % </span>
+<span class="c">% Simply extend this matrix as if your design matrix included the voxelwise covariates. </span>
+<span class="c">% ASF-added-end % </span>
+<span class="c">% </span>
+<span class="c">% OUTPUT_FILE_BASE: matrix whose rows are the base for output statistics,</span>
+<span class="c">% one base for each row of CONTRAST, padded with extra blanks if </span>
+<span class="c">% necessary; they will be removed before use.</span>
+<span class="c">%</span>
+<span class="c">% WHICH_STATS: character matrix inidicating which statistics for output,</span>
+<span class="c">% one row for each row of CONTRAST. If only one row is supplied, it is used </span>
+<span class="c">% for all contrasts. The statistics are indicated by strings, which can</span>
+<span class="c">% be anywhere in WHICH_STATS, and outputed in OUTPUT_FILE_BASEstring.ext, </span>
+<span class="c">% depending on the extension of INPUT_FILES_EF. The strings are: </span>
+<span class="c">% _t       T statistic image =ef/sd.</span>
+<span class="c">% _ef      effect (b) image for magnitudes.</span>
+<span class="c">% _sd      standard deviation of the effect for magnitudes. </span>
+<span class="c">% _sdratio ratio of random to fixed effects standard deviation. Note that</span>
+<span class="c">%          sdratio^2 is the F statistic for testing for random effects.</span>
+<span class="c">% _conj    conjunction (minimum) of the T statistics for the data, i.e. </span>
+<span class="c">%          min(INPUT_FILES_EF/sd) using a mixed effects sd. </span>
+<span class="c">% _resid   the residuals from the model, only for non-excluded frames.</span>
+<span class="c">% _wresid  the whitened residuals from the model normalized by dividing</span>
+<span class="c">%          by their root sum of squares, only for non-excluded frames.</span>
+<span class="c">% _fwhm    FWHM information.</span>
+<span class="c">%          Frame 1: effective FWHM in mm of the whitened residuals,</span>
+<span class="c">%          as if they were white noise smoothed with a Gaussian filter </span>
+<span class="c">%          whose fwhm was FWHM. FWHM is unbiased so that if it is smoothed  </span>
+<span class="c">%          spatially then it remains unbiased. If FWHM &gt; 50, FWHM = 50.</span>
+<span class="c">%          Frame 2: resels per voxel, again unbiased.</span>
+<span class="c">%          Frames 3,4,5: correlation of adjacent resids in x,y,z directions.</span>
+<span class="c">% e.g. WHICH_STATS=&#39;try this: _t _ef _sd and_fwhm blablabla&#39; </span>
+<span class="c">% will output t, ef, sd and fwhm.</span>
+<span class="c">% You can still use 1 and 0&#39;s for backwards compatiability with previous </span>
+<span class="c">% versions - see help from previous versions. </span>
+<span class="c">% If empty (default), only DF is returned. The strings are: </span>
+<span class="c">% </span>
+<span class="c">% FWHM_VARATIO is the fwhm in mm of the Gaussian filter used to smooth the</span>
+<span class="c">% ratio of the random effects variance divided by the fixed effects variance.</span>
+<span class="c">%  - 0 will do no smoothing, and give a purely random effects analysis;</span>
+<span class="c">%  - Inf will do complete smoothing to a global ratio of one, giving a </span>
+<span class="c">%    purely fixed effects analysis. </span>
+<span class="c">% The higher the FWHM_VARATIO, the higher the ultimate degrees of</span>
+<span class="c">% freedom DF of the tstat image (printed out at the beginning of the run), </span>
+<span class="c">% and the more sensitive the test. However too much smoothing will</span>
+<span class="c">% bias the results. The program prints and returns DF as its value.</span>
+<span class="c">% Alternatively, if FWHM_VARATIO is negative, it is taken as the desired</span>
+<span class="c">% df, and the fwhm is chosen to get as close to this as possible (if fwhm&gt;50,  </span>
+<span class="c">% fwhm=Inf). Default is -100, i.e. the fwhm is chosen to achieve 100 df. </span>
+<span class="c">%</span>
+<span class="c">% NITER is the number of iterations of the EM algorithm. Default is 10.</span>
+<span class="c">%</span>
+<span class="c">% DF_LIMIT controls which method is used for estimating FWHM. If DF_RESID &gt; </span>
+<span class="c">% DF_LIMIT, then the FWHM is calculated assuming the Gaussian filter is </span>
+<span class="c">% arbitrary. However if DF is small, this gives inaccurate results, so</span>
+<span class="c">% if DF_RESID &lt;= DF_LIMIT, the FWHM is calculated assuming that the axes of</span>
+<span class="c">% the Gaussian filter are aligned with the x, y and z axes of the data. </span>
+<span class="c">% Default is 4. </span>
+<span class="c">%</span>
+<span class="c">% DF.t is the effective mixed-effects df of the sd and T statistics.</span>
+<span class="c">% DF.resid is the df of a random effects analysis.</span>
+<span class="c">% DF.fixed is the df of a fixed effects analysis.</span>
+<span class="c">% DF.sdratio is the numerator df of _sdratio (denominator is DF.fixed).</span>
+<span class="c">% Note that DF.resid &lt;= DF.t &lt;= DF.fixed. </span>
+<span class="c">%</span>
+<span class="c">% COVARIATE_FILES are input files that contain subject specific voxel-wise covariates,</span>
+<span class="c">% designed to be gray matter probability files, but could be anything...</span>
+<span class="c">%   These files are specified, identically to INPUT_FILES. </span>
+<span class="c">%   The file list must containt N times the number of voxelwise covariates. </span>
+<span class="c">%     -- This code was added by Andrew S. Fox on 1/18/06.</span>
+<span class="c">%     -- All adapted source can be found between &quot;ASF - &quot; text markers.</span>
+<span class="c">% </span>
+
+<span class="c">%############################################################################</span>
+<span class="c">% COPYRIGHT:   Copyright 2002 K.J. Worsley,</span>
+<span class="c">%              Department of Mathematics and Statistics,</span>
+<span class="c">%              McConnell Brain Imaging Center, </span>
+<span class="c">%              Montreal Neurological Institute,</span>
+<span class="c">%              McGill University, Montreal, Quebec, Canada. </span>
+<span class="c">%              worsley@math.mcgill.ca, liao@math.mcgill.ca</span>
+<span class="c">%</span>
+<span class="c">%              Permission to use, copy, modify, and distribute this</span>
+<span class="c">%              software and its documentation for any purpose and without</span>
+<span class="c">%              fee is hereby granted, provided that the above copyright</span>
+<span class="c">%              notice appear in all copies.  The author and McGill University</span>
+<span class="c">%              make no representations about the suitability of this</span>
+<span class="c">%              software for any purpose.  It is provided &quot;as is&quot; without</span>
+<span class="c">%              express or implied warranty.</span>
+<span class="c">%############################################################################</span>
+
+<span class="c">% Defaults:</span>
+
+<span class="n">if</span> <span class="s">nargin&lt;3</span><span class="p">;</span> <span class="n">df_data</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;4</span><span class="p">;</span> <span class="n">fwhm_data</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;5</span><span class="p">;</span> <span class="n">X</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;6</span><span class="p">;</span> <span class="n">contrast</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;7</span><span class="p">;</span> <span class="n">output_file_base</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;8</span><span class="p">;</span> <span class="n">which_stats</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;9</span><span class="p">;</span> <span class="n">fwhm_varatio</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;10</span><span class="p">;</span> <span class="n">niter</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">nargin&lt;11</span><span class="p">;</span> <span class="n">df_limit</span><span class="p">=[];</span> <span class="n">end</span>
+<span class="s">%</span> <span class="s">ASF</span> <span class="s">-</span> <span class="s">ADDED</span> <span class="s">CODE</span> <span class="s">1/18/06</span>
+<span class="k">if</span> <span class="n">nargin</span><span class="o">&lt;</span><span class="mi">12</span><span class="p">;</span> <span class="n">covariate_files</span><span class="p">=[];</span> <span class="k">end</span><span class="p">;</span>
+<span class="c">% ASF - END CODE 1/18/06</span>
+
+<span class="n">parent_file</span><span class="p">=</span><span class="n">deblank</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">(</span><span class="mi">1</span><span class="p">,:));</span>
+<span class="c">% ASF - Allow empty design matrix if there are voxelwise covariates...</span>
+<span class="k">if</span> <span class="nb">isempty</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">isempty</span><span class="p">(</span><span class="n">covariate_files</span><span class="p">);</span> <span class="n">X</span><span class="p">=</span><span class="nb">ones</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">isempty(contrast)</span><span class="p">;</span> <span class="n">contrast</span><span class="p">=[</span><span class="mi">1</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)];</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">isempty(output_file_base)</span><span class="p">;</span> <span class="n">output_file_base</span><span class="p">=</span><span class="n">parent_file</span><span class="p">(</span><span class="mi">1</span><span class="p">:(</span><span class="n">max</span><span class="p">(</span><span class="n">findstr</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="n">parent_file</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">isempty(fwhm_varatio)</span><span class="p">;</span> <span class="n">fwhm_varatio</span><span class="p">=</span><span class="o">-</span><span class="mi">100</span><span class="p">;</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">isempty(niter)</span><span class="p">;</span> <span class="n">niter</span><span class="p">=</span><span class="mi">10</span><span class="p">;</span> <span class="n">end</span>
+<span class="s">if</span> <span class="s">isempty(df_limit)</span><span class="p">;</span> <span class="n">df_limit</span><span class="p">=</span><span class="mi">4</span><span class="p">;</span> <span class="n">end</span>
+
+<span class="s">%</span> <span class="s">ASF</span> <span class="s">-</span> <span class="s">ADDED</span> <span class="s">CODE</span> <span class="s">1/18/06</span>
+<span class="c">%   Make sure covariate_files are correctly handled... particularly in that some other features are</span>
+<span class="c">%       mutually exclusive with the current implementation.</span>
+
+<span class="n">if</span> <span class="s">~isempty(</span> <span class="s">covariate_files</span> <span class="s">)</span>
+    <span class="n">if</span> <span class="s">~isempty(input_files_sd)</span>
+        <span class="n">error</span><span class="p">(</span> <span class="s">&#39;Sorry, the covariate files function is not implemented with the sd files input.&#39;</span> <span class="p">);</span>
+    <span class="k">end</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fwhm_varatio</span><span class="o">~=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">error</span><span class="p">(</span> <span class="s">&#39;Sorry, the covariate files function is only implemented with fwhm_varatio = 0.&#39;</span> <span class="p">);</span>
+    <span class="k">end</span><span class="p">;</span>
+<span class="k">end</span><span class="p">;</span>
+<span class="c">% ASF - END CODE 1/18/06</span>
+
+
+<span class="c">% Open images:</span>
+
+<span class="n">n</span><span class="p">=</span><span class="nb">size</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">d</span><span class="p">=</span><span class="n">fmris_read_image</span><span class="p">(</span><span class="n">parent_file</span><span class="p">);</span>
+<span class="n">d</span><span class="p">.</span><span class="n">dim</span>
+<span class="n">numslices</span><span class="p">=</span><span class="n">d</span><span class="p">.</span><span class="n">dim</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">numys</span><span class="p">=</span><span class="n">d</span><span class="p">.</span><span class="n">dim</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">numxs</span><span class="p">=</span><span class="n">d</span><span class="p">.</span><span class="n">dim</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">numpix</span><span class="p">=</span><span class="n">numys</span><span class="o">*</span><span class="n">numxs</span><span class="p">;</span>
+<span class="n">Steps</span><span class="p">=</span><span class="n">d</span><span class="p">.</span><span class="n">vox</span>
+<span class="n">numcolX</span><span class="p">=</span><span class="nb">size</span><span class="p">(</span><span class="n">contrast</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">D</span><span class="p">=</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">numslices</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c">% ASF - ADDED CODE 1/18/06</span>
+<span class="c">%   Set the number of covariates, and make sure that contrast is of the appropriate dim.</span>
+<span class="k">if</span> <span class="o">~</span><span class="nb">isempty</span><span class="p">(</span> <span class="n">covariate_files</span> <span class="p">)</span>
+    <span class="n">numCovariates</span> <span class="p">=</span> <span class="nb">floor</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">covariate_files</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">covariate_files</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">numCovariates</span><span class="p">))</span><span class="o">~=</span> <span class="mi">0</span> <span class="p">)</span>
+        <span class="n">error</span><span class="p">(</span> <span class="s">&#39;ASF: &quot;There is an inappropriate number of covariate files, there must be a multiple of the number of effect files.&quot;&#39;</span> <span class="p">);</span>
+    <span class="k">end</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nb">size</span><span class="p">(</span><span class="n">contrast</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">contrast</span> <span class="p">=</span> <span class="p">[</span><span class="n">contrast</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">contrast</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">numCovariates</span><span class="p">)];</span>
+        <span class="n">numcolX</span><span class="p">=</span><span class="nb">size</span><span class="p">(</span><span class="n">contrast</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">else</span>
+        <span class="s">if(</span> <span class="s">size(contrast,2)</span> <span class="s">~=</span> <span class="s">size(X,2)+numCovariates</span> <span class="s">)</span>
+            <span class="n">print</span><span class="p">(</span> <span class="s">&#39;ASF: &quot;There seem to be an inappropriate number of contasts.&quot;&#39;</span><span class="p">);</span>
+        <span class="k">end</span><span class="p">;</span>
+    <span class="k">end</span><span class="p">;</span>
+<span class="k">end</span><span class="p">;</span>
+<span class="c">% ASF - END CODE 1/18/06</span>
+
+<span class="c">% Open files for writing:</span>
+
+<span class="p">[</span><span class="n">base</span><span class="p">,</span><span class="n">ext</span><span class="p">]=</span><span class="n">fileparts2</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">(</span><span class="mi">1</span><span class="p">,:));</span>
+<span class="n">out</span><span class="p">.</span><span class="n">parent_file</span><span class="p">=</span><span class="n">parent_file</span><span class="p">;</span>
+<span class="n">numcontrasts</span><span class="p">=</span><span class="nb">size</span><span class="p">(</span><span class="n">contrast</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">if</span> <span class="s">~isempty(which_stats)</span>
+   <span class="n">if</span> <span class="s">size(which_stats,1)==1</span>
+      <span class="n">which_stats</span><span class="p">=</span><span class="nb">repmat</span><span class="p">(</span><span class="n">which_stats</span><span class="p">,</span><span class="n">numcontrasts</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+   <span class="n">end</span>
+   <span class="s">if</span> <span class="s">isnumeric(which_stats)</span>
+      <span class="n">which_stats</span><span class="p">=[</span><span class="n">which_stats</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">numcontrasts</span><span class="p">,</span><span class="mi">9</span><span class="o">-</span><span class="nb">size</span><span class="p">(</span><span class="n">which_stats</span><span class="p">,</span><span class="mi">2</span><span class="p">))];</span>
+   <span class="n">else</span>
+      <span class="s">ws=which_stats</span><span class="p">;</span>
+      <span class="n">which_stats</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">numcontrasts</span><span class="p">,</span><span class="mi">9</span><span class="p">);</span>
+      <span class="n">fst</span><span class="p">=[</span><span class="s">&#39;_t      &#39;</span><span class="p">;</span><span class="s">&#39;_ef     &#39;</span><span class="p">;</span><span class="s">&#39;_sd     &#39;</span><span class="p">;</span><span class="s">&#39;_sdratio&#39;</span><span class="p">;</span><span class="s">&#39;_conj   &#39;</span><span class="p">;</span><span class="s">&#39;_resid  &#39;</span><span class="p">;</span><span class="s">&#39;_wresid &#39;</span><span class="p">;</span><span class="s">&#39;not used&#39;</span><span class="p">;</span><span class="s">&#39;_fwhm   &#39;</span><span class="p">];</span>
+      <span class="n">for</span> <span class="s">i=1:numcontrasts</span>
+         <span class="n">for</span> <span class="s">j=1:3</span>
+            <span class="n">which_stats</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)=</span> <span class="o">~</span><span class="nb">isempty</span><span class="p">(</span><span class="n">strfind</span><span class="p">(</span><span class="n">ws</span><span class="p">(</span><span class="nb">i</span><span class="p">,:),</span><span class="n">deblank</span><span class="p">(</span><span class="n">fst</span><span class="p">(</span><span class="nb">j</span><span class="p">,:))));</span> 
+         <span class="n">end</span>
+      <span class="s">end</span>
+      <span class="n">for</span> <span class="s">j=4:9</span>
+         <span class="n">which_stats</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">j</span><span class="p">)=</span> <span class="o">~</span><span class="nb">isempty</span><span class="p">(</span><span class="n">strfind</span><span class="p">(</span><span class="n">ws</span><span class="p">(</span><span class="mi">1</span><span class="p">,:),</span><span class="n">deblank</span><span class="p">(</span><span class="n">fst</span><span class="p">(</span><span class="nb">j</span><span class="p">,:))));</span>
+      <span class="n">end</span>
+   <span class="s">end</span>
+   <span class="n">which_stats</span>
+<span class="s">end</span>
+
+<span class="c">% ASF - COMMENTED CODE 1/18/06</span>
+  <span class="c">%   X2 did not appear anywhere else in the file... since the design matrix changes </span>
+  <span class="c">%     from voxel to voxel, I commented the following line.</span>
+<span class="c">% X2=X&#39;.^2;</span>
+<span class="c">% ASF - END COMMENTED CODE 1/18/06</span>
+
+<span class="n">p</span><span class="p">=</span><span class="n">rank</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="p">=</span><span class="n">n</span><span class="o">-</span><span class="n">p</span><span class="p">;</span>
+
+<span class="c">% ASF - ADDED CODE 1/18/06</span>
+<span class="c">%   Fix the residual degrees of freedom if there are covariate files.</span>
+  <span class="c">%   ASF: Note that this assumes that the covariate files are not perfectly </span>
+  <span class="c">%         correlated with other variables in the design matrix. As I understand,</span>
+  <span class="c">%         failure to meet this requirement will result in the correlated variables</span>
+  <span class="c">%         spliting the variance somehow, as well as underestimating the residual</span>
+  <span class="c">%         degrees of freedom.</span>
+<span class="k">if</span> <span class="o">~</span><span class="nb">isempty</span><span class="p">(</span> <span class="n">covariate_files</span> <span class="p">)</span>
+    <span class="n">df</span><span class="p">.</span><span class="n">resid</span> <span class="p">=</span> <span class="n">df</span><span class="p">.</span><span class="n">resid</span> <span class="o">-</span> <span class="n">numCovariates</span><span class="p">;</span>
+<span class="k">end</span><span class="p">;</span>
+<span class="c">% ASF - END CODE 1/18/06</span>
+
+<span class="n">if</span> <span class="s">isempty(input_files_sd)</span>
+   <span class="n">df_data</span><span class="p">=</span><span class="n">Inf</span>
+<span class="k">else</span>
+   <span class="n">if</span> <span class="s">isempty(df_data)</span>
+      <span class="n">for</span> <span class="s">ifile=1:n</span>
+         <span class="n">d</span><span class="p">=</span><span class="n">fmris_read_image</span><span class="p">(</span><span class="n">deblank</span><span class="p">(</span><span class="n">input_files_sd</span><span class="p">(</span><span class="n">ifile</span><span class="p">,:)),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+         <span class="n">if</span> <span class="s">isfield(d,&#39;df&#39;)</span>
+            <span class="n">df_data</span><span class="p">(</span><span class="n">ifile</span><span class="p">)=</span><span class="n">d</span><span class="p">.</span><span class="n">df</span><span class="p">;</span>
+         <span class="n">end</span>
+      <span class="s">end</span>
+   <span class="n">end</span>
+<span class="s">end</span>
+<span class="k">if</span> <span class="nb">length</span><span class="p">(</span><span class="n">df_data</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span>
+   <span class="n">df_data</span><span class="p">=</span><span class="nb">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">df_data</span><span class="p">;</span>
+<span class="n">end</span>
+<span class="s">df.fixed=sum(df_data)</span><span class="p">;</span>
+
+<span class="n">if</span> <span class="s">isempty(which_stats)</span>
+   <span class="n">df_data</span>
+   <span class="s">df</span>
+   <span class="n">return</span>
+<span class="s">end</span>
+
+<span class="n">if</span> <span class="s">df.resid&gt;0</span>
+   
+   <span class="c">% Degrees of freedom is greater than zero, so do mixed effects analysis:</span>
+   
+   <span class="n">Y</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">numpix</span><span class="p">);</span>
+   <span class="n">S</span><span class="p">=</span><span class="nb">ones</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">numpix</span><span class="p">);</span>
+   <span class="n">varfix</span><span class="p">=</span><span class="nb">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">numpix</span><span class="p">);</span>
+   <span class="n">varatio_vol</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">numpix</span><span class="p">,</span> <span class="n">numslices</span><span class="p">);</span>
+   
+   <span class="n">if</span> <span class="s">fwhm_varatio&lt;0</span>
+      <span class="c">% find fwhm to achieve target df:</span>
+      <span class="n">df_target</span><span class="p">=</span><span class="o">-</span><span class="n">fwhm_varatio</span><span class="p">;</span>
+      <span class="n">if</span> <span class="s">df_target&lt;=df.resid</span>
+         <span class="n">fwhm_varatio</span><span class="p">=</span><span class="mi">0</span>
+      <span class="n">elseif</span> <span class="s">df_target&gt;=df.fixed</span>
+         <span class="n">fwhm_varatio</span><span class="p">=</span><span class="n">Inf</span>
+      <span class="n">end</span>
+   <span class="s">end</span>
+   
+   <span class="n">if</span> <span class="s">fwhm_varatio&lt;Inf</span>
+      
+      <span class="c">% Now loop over voxels to get variance ratio, varatio:</span>
+      
+      <span class="n">Sreduction</span><span class="p">=</span><span class="mf">0.99</span>
+      <span class="n">for</span> <span class="s">slice=1:numslices</span>
+         <span class="n">First_pass_slice</span><span class="p">=</span><span class="n">slice</span>            
+         <span class="n">for</span> <span class="s">ifile=1:n</span>
+            <span class="n">d</span><span class="p">=</span><span class="n">fmris_read_image</span><span class="p">(</span><span class="n">deblank</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">(</span><span class="n">ifile</span><span class="p">,:)),</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">Y</span><span class="p">(</span><span class="n">ifile</span><span class="p">,:)=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">numpix</span><span class="p">);</span>
+         <span class="n">end</span>
+         
+         <span class="s">%</span> <span class="s">ASF</span> <span class="s">-</span> <span class="s">ADDED</span> <span class="s">CODE</span> <span class="s">1/18/06</span>
+         <span class="n">if</span> <span class="s">~isempty(covariate_files)</span>
+             <span class="n">for</span> <span class="s">cfile=1:n*numCovariates</span>
+                 <span class="n">c</span><span class="p">=</span><span class="n">fmris_read_image</span><span class="p">(</span><span class="n">deblank</span><span class="p">(</span><span class="n">covariate_files</span><span class="p">(</span><span class="n">cfile</span><span class="p">,:)),</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+                 <span class="n">covariate</span><span class="p">(</span><span class="n">cfile</span><span class="p">,:)=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">numpix</span><span class="p">);</span>
+             <span class="k">end</span><span class="p">;</span>
+             <span class="n">for</span> <span class="s">asf_i=1:numpix</span>
+                 <span class="n">asf_X</span> <span class="p">=</span> <span class="n">X</span><span class="p">;</span>
+                 <span class="k">for</span><span class="p">(</span> <span class="n">covariateNum</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numCovariates</span> <span class="p">)</span>
+                    <span class="c">%% de-mean covariate -- dosen&#39;t hurt...</span>
+                    <span class="n">covariate</span><span class="p">(</span> <span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)</span> <span class="p">=</span> <span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)</span><span class="o">-</span><span class="n">mean</span><span class="p">(</span><span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">));</span>
+                    <span class="n">asf_X</span> <span class="p">=</span> <span class="p">[</span><span class="n">asf_X</span> <span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)];</span>
+                 <span class="k">end</span><span class="p">;</span>
+                 <span class="n">sigma2</span><span class="p">(</span><span class="n">asf_i</span><span class="p">)</span> <span class="p">=</span> <span class="n">sum</span><span class="p">((</span><span class="n">Y</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">)</span><span class="o">-</span><span class="n">asf_X</span><span class="o">*</span><span class="p">(</span><span class="n">pinv</span><span class="p">(</span><span class="n">asf_X</span><span class="p">)</span><span class="o">*</span><span class="n">Y</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">)))</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="p">;</span>
+             <span class="k">end</span><span class="p">;</span>
+             <span class="n">clear</span> <span class="s">covariate</span><span class="p">;</span>
+         <span class="n">else</span>
+             <span class="s">sigma2=sum((Y-X*(pinv(X)*Y)).^2,1)/df.resid</span><span class="p">;</span>
+         <span class="k">end</span><span class="p">;</span>
+         <span class="c">% ASF - END CODE 1/18/06</span>
+         <span class="c">% sigma2=sum((Y-X*(pinv(X)*Y)).^2,1)/df.resid;</span>
+         
+<span class="c">%         if ~isempty(input_files_sd)</span>
+<span class="c">%           ...</span>
+<span class="c">%         end</span>
+         
+<span class="c">%         if isempty(fwhm_data) &amp; (fwhm_varatio~=0)</span>
+<span class="c">%           ...</span>
+<span class="c">%          end</span>
+         
+<span class="c">%          if ~isempty(input_files_sd)</span>
+<span class="c">%           ...</span>
+<span class="c">%          end</span>
+         <span class="n">varatio_vol</span><span class="p">(:,</span><span class="n">slice</span><span class="p">)=(</span><span class="n">sigma2</span><span class="o">./</span><span class="p">(</span><span class="n">varfix</span><span class="o">+</span><span class="p">(</span><span class="n">varfix</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">))</span><span class="o">.*</span><span class="p">(</span><span class="n">varfix</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">))</span><span class="o">&#39;</span><span class="p">;</span>  
+         
+      <span class="n">end</span>
+      
+<span class="s">%</span>       <span class="s">if</span> <span class="s">fwhm_varatio&lt;0</span>
+<span class="c">%           ...</span>
+<span class="c">%       end</span>
+      
+      <span class="p">[</span><span class="n">df</span><span class="p">,</span> <span class="n">ker_x</span><span class="p">,</span> <span class="n">ker_y</span><span class="p">,</span> <span class="n">K</span><span class="p">]=</span><span class="n">regularized_df</span><span class="p">(</span><span class="n">fwhm_varatio</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">Steps</span><span class="p">,</span><span class="n">numslices</span><span class="p">,</span><span class="n">df</span><span class="p">,</span><span class="n">fwhm_data</span><span class="p">);</span>
+      <span class="n">df</span><span class="p">.</span><span class="n">sdratio</span><span class="p">=</span><span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">sdratio</span><span class="p">);</span>
+      <span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">=</span><span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">);</span>
+      
+<span class="c">%       if fwhm_varatio&gt;0 </span>
+<span class="c">%           ...</span>
+<span class="c">%       end</span>
+      
+   <span class="n">else</span>
+      <span class="s">df.sdratio=Inf</span><span class="p">;</span>
+      <span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">fixed</span><span class="p">;</span>
+   <span class="n">end</span>
+   <span class="s">df_data</span>
+   <span class="n">df</span>
+   
+   <span class="s">%</span> <span class="s">ASF</span> <span class="s">-</span> <span class="s">ADDED</span> <span class="s">CODE</span> <span class="s">1/18/06</span>
+   <span class="c">%  Since the contrast size has changed, this should not be performed if there are covariate_files.</span>
+   <span class="n">if</span> <span class="s">isempty(covariate_files)</span>
+       <span class="n">pinvX</span><span class="p">=</span><span class="n">pinv</span><span class="p">(</span><span class="n">X</span><span class="p">);</span>
+       <span class="n">ncpinvX</span><span class="p">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">sum</span><span class="p">((</span><span class="n">contrast</span><span class="o">*</span><span class="n">pinvX</span><span class="p">)</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">));</span>
+   <span class="k">end</span><span class="p">;</span>
+   <span class="c">% ASF - END CODE 1/18/06</span>
+   <span class="c">% pinvX=pinv(X);</span>
+   <span class="c">% ncpinvX=sqrt(sum((contrast*pinvX).^2,2));</span>
+       
+       
+   <span class="n">if</span> <span class="s">isempty(fwhm_data)</span>
+      <span class="n">for</span> <span class="s">ifile=1:n</span>
+         <span class="n">d</span><span class="p">=</span><span class="n">fmris_read_image</span><span class="p">(</span><span class="n">deblank</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">(</span><span class="n">ifile</span><span class="p">,:)),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+         <span class="n">if</span> <span class="s">isfield(d,&#39;fwhm&#39;)</span>
+            <span class="n">fwhm_data</span><span class="p">(</span><span class="n">ifile</span><span class="p">)=</span><span class="n">d</span><span class="p">.</span><span class="n">fwhm</span><span class="p">;</span>
+         <span class="n">end</span>
+      <span class="s">end</span>
+      <span class="n">if</span> <span class="s">~isempty(fwhm_data)</span>
+         <span class="n">fwhm_data</span><span class="p">=</span><span class="n">mean</span><span class="p">(</span><span class="n">fwhm_data</span><span class="p">(</span><span class="n">fwhm_data</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">))</span>
+      <span class="n">end</span>
+   <span class="s">end</span>
+   <span class="n">if</span> <span class="s">~isempty(fwhm_data)</span>
+      <span class="n">out</span><span class="p">.</span><span class="n">fwhm</span><span class="p">=</span><span class="n">fwhm_data</span><span class="p">;</span>
+   <span class="n">end</span>
+   
+   <span class="s">%</span> <span class="s">Second</span> <span class="s">loop</span> <span class="s">over</span> <span class="s">slices</span> <span class="s">to</span> <span class="s">get</span> <span class="s">statistics:</span>
+   
+   <span class="n">for</span> <span class="s">slice=1:numslices</span>
+       <span class="n">Second_pass_slice</span><span class="p">=</span><span class="n">slice</span>            
+       <span class="n">for</span> <span class="s">ifile=1:n</span>
+           <span class="n">d</span><span class="p">=</span><span class="n">fmris_read_image</span><span class="p">(</span><span class="n">deblank</span><span class="p">(</span><span class="n">input_files_ef</span><span class="p">(</span><span class="n">ifile</span><span class="p">,:)),</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+           <span class="n">Y</span><span class="p">(</span><span class="n">ifile</span><span class="p">,:)=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">numpix</span><span class="p">);</span>
+       <span class="n">end</span>
+       <span class="s">%</span>       <span class="s">if</span> <span class="s">~isempty(input_files_sd)</span>
+       <span class="c">%           ...</span>
+       <span class="c">%       else</span>
+       
+       <span class="c">% ASF - ADDED CODE 1/18/06</span>
+       <span class="n">if</span> <span class="s">~isempty(covariate_files)</span>
+           <span class="n">for</span> <span class="s">cfile=1:n*numCovariates</span>
+               <span class="n">c</span><span class="p">=</span><span class="n">fmris_read_image</span><span class="p">(</span><span class="n">deblank</span><span class="p">(</span><span class="n">covariate_files</span><span class="p">(</span><span class="n">cfile</span><span class="p">,:)),</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+               <span class="n">covariate</span><span class="p">(</span><span class="n">cfile</span><span class="p">,:)=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">numpix</span><span class="p">);</span>
+           <span class="k">end</span><span class="p">;</span>
+           <span class="n">for</span> <span class="s">asf_i=1:numpix</span>
+               <span class="n">asf_X</span> <span class="p">=</span> <span class="n">X</span><span class="p">;</span>
+               <span class="k">for</span><span class="p">(</span> <span class="n">covariateNum</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numCovariates</span> <span class="p">)</span>
+                  <span class="c">%% de-mean covariate -- dosen&#39;t hurt...</span>
+                  <span class="n">covariate</span><span class="p">(</span> <span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)</span> <span class="p">=</span> <span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)</span><span class="o">-</span><span class="n">mean</span><span class="p">(</span><span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">));</span>
+                  <span class="n">asf_X</span> <span class="p">=</span> <span class="p">[</span><span class="n">asf_X</span> <span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)];</span>
+               <span class="k">end</span><span class="p">;</span>
+               <span class="n">asf_pinvX</span> <span class="p">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">asf_X</span><span class="p">);</span>
+               <span class="n">betahat</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">)=</span><span class="n">asf_pinvX</span><span class="o">*</span><span class="n">Y</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">);</span>
+               <span class="n">sigma2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">asf_i</span><span class="p">)=</span><span class="n">varatio_vol</span><span class="p">(</span><span class="n">asf_i</span><span class="p">,</span><span class="n">slice</span><span class="p">)</span><span class="o">&#39;</span><span class="p">;</span>
+               
+               <span class="n">asf_ncpinvX</span><span class="p">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">sum</span><span class="p">((</span><span class="n">contrast</span><span class="o">*</span><span class="n">asf_pinvX</span><span class="p">)</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">));</span>
+               <span class="n">sdeffect_slice</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">)=</span><span class="n">asf_ncpinvX</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">sigma2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">asf_i</span><span class="p">));</span>
+           <span class="k">end</span><span class="p">;</span>
+       <span class="n">else</span>
+           <span class="s">betahat=pinvX*Y</span><span class="p">;</span>
+           <span class="n">sigma2</span><span class="p">=</span><span class="n">varatio_vol</span><span class="p">(:,</span><span class="n">slice</span><span class="p">)</span><span class="o">&#39;</span><span class="p">;</span>            
+           <span class="n">sdeffect_slice</span><span class="p">=</span><span class="n">ncpinvX</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">sigma2</span><span class="p">);</span>
+       <span class="k">end</span><span class="p">;</span>
+       <span class="c">% ASF - END CODE 1/18/06</span>
+       <span class="c">% betahat=pinvX*Y;</span>
+       <span class="c">% sigma2=varatio_vol(:,slice)&#39;;            </span>
+       <span class="c">% sdeffect_slice=ncpinvX*sqrt(sigma2);</span>
+       
+       <span class="n">Sigma</span><span class="p">=</span><span class="nb">repmat</span><span class="p">(</span><span class="n">sigma2</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+       <span class="n">W</span><span class="p">=(</span><span class="n">Sigma</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">./</span><span class="p">(</span><span class="n">Sigma</span><span class="o">+</span><span class="p">(</span><span class="n">Sigma</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">));</span>
+       
+       <span class="n">effect_slice</span><span class="p">=</span><span class="n">contrast</span><span class="o">*</span><span class="n">betahat</span><span class="p">;</span>
+       <span class="n">tstat_slice</span><span class="p">=</span><span class="n">effect_slice</span><span class="o">./</span><span class="p">(</span><span class="n">sdeffect_slice</span><span class="o">+</span><span class="p">(</span><span class="n">sdeffect_slice</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">))</span> <span class="c">...</span>
+           <span class="o">.*</span><span class="p">(</span><span class="n">sdeffect_slice</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">);</span>
+       <span class="n">sdratio_slice</span><span class="p">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">varatio_vol</span><span class="p">(:,</span><span class="n">slice</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+      
+      <span class="c">% output:</span>
+      
+      <span class="n">for</span> <span class="s">k=1:numcontrasts</span>
+         <span class="n">if</span> <span class="s">which_stats(k,1)</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=[];</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+            <span class="s">out.file_name=[deblank(output_file_base(k,:))</span> <span class="s">&#39;_t&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">tstat_slice</span><span class="p">(</span><span class="n">k</span><span class="p">,:),</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+         <span class="n">end</span>
+         <span class="s">if</span> <span class="s">which_stats(k,2)</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=[];</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+            <span class="s">out.file_name=[deblank(output_file_base(k,:))</span> <span class="s">&#39;_ef&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">effect_slice</span><span class="p">(</span><span class="n">k</span><span class="p">,:),</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=</span><span class="n">n</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+         <span class="n">end</span>
+         <span class="s">if</span> <span class="s">which_stats(k,3)</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=[];</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+            <span class="s">out.file_name=[deblank(output_file_base(k,:))</span> <span class="s">&#39;_sd&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">sdeffect_slice</span><span class="p">(</span><span class="n">k</span><span class="p">,:),</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+         <span class="n">end</span>
+      <span class="s">end</span>
+      <span class="n">if</span> <span class="s">which_stats(1,4)</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=[];</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+         <span class="s">out.file_name=[deblank(output_file_base(1,:))</span> <span class="s">&#39;_sdratio&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="mi">1</span><span class="p">];</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">sdratio_slice</span><span class="p">,</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">);</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=[</span><span class="n">df</span><span class="p">.</span><span class="n">sdratio</span> <span class="n">df</span><span class="p">.</span><span class="n">fixed</span><span class="p">];</span>
+         <span class="n">if</span> <span class="s">isfield(out,&#39;fwhm&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">.</span><span class="n">fwhm</span><span class="p">=[</span><span class="n">out</span><span class="p">.</span><span class="n">fwhm</span> <span class="n">fwhm_varatio</span><span class="p">];</span> <span class="n">end</span>
+         <span class="s">fmris_write_image(out,slice,1)</span><span class="p">;</span>
+         <span class="n">if</span> <span class="s">isfield(out,&#39;fwhm&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">.</span><span class="n">fwhm</span><span class="p">=</span><span class="n">out</span><span class="p">.</span><span class="n">fwhm</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">end</span>
+      <span class="s">end</span>
+      <span class="n">if</span> <span class="s">which_stats(1,5)</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">file_name</span><span class="p">=[</span><span class="n">deblank</span><span class="p">(</span><span class="n">output_file_base</span><span class="p">(</span><span class="mi">1</span><span class="p">,:))</span> <span class="s">&#39;_conj&#39;</span> <span class="n">ext</span><span class="p">];</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="mi">1</span><span class="p">];</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">min</span><span class="p">(</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">W</span><span class="p">)</span><span class="o">.*</span><span class="n">Y</span><span class="p">,[],</span><span class="mi">1</span><span class="p">),</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">);</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">;</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">nconj</span><span class="p">=</span><span class="n">n</span><span class="p">;</span>
+         <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+      <span class="n">end</span>
+      <span class="s">if</span> <span class="s">which_stats(1,6)</span>
+          <span class="c">% ASF - ADDED CODE 2/18/06</span>
+          <span class="n">if</span> <span class="s">~isempty(covariate_files)</span>
+              <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=[];</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+              <span class="s">out.file_name=[deblank(output_file_base(1,:))</span> <span class="s">&#39;_resid&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+              <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="n">n</span><span class="p">];</span>
+              <span class="n">asf_data</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">numxs</span><span class="o">*</span><span class="n">numys</span><span class="p">);</span>
+              <span class="n">for</span> <span class="s">asf_i=1:numpix</span>
+                  <span class="n">asf_X</span> <span class="p">=</span> <span class="n">X</span><span class="p">;</span>
+                  <span class="k">for</span><span class="p">(</span> <span class="n">covariateNum</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numCovariates</span> <span class="p">)</span>
+                     <span class="c">%% de-mean covariate -- dosen&#39;t hurt...</span>
+                     <span class="n">covariate</span><span class="p">(</span> <span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)</span> <span class="p">=</span> <span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)</span><span class="o">-</span><span class="n">mean</span><span class="p">(</span><span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">));</span>
+                     <span class="n">asf_X</span> <span class="p">=</span> <span class="p">[</span><span class="n">asf_X</span> <span class="n">covariate</span><span class="p">((</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">n</span><span class="o">*</span><span class="n">covariateNum</span><span class="p">),</span><span class="n">asf_i</span><span class="p">)];</span>
+                  <span class="k">end</span><span class="p">;</span>
+                  <span class="n">asf_data</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">)</span> <span class="p">=</span> <span class="n">Y</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">)</span> <span class="o">-</span> <span class="n">asf_X</span><span class="o">*</span><span class="n">betahat</span><span class="p">(:,</span><span class="n">asf_i</span><span class="p">);</span>
+              <span class="k">end</span><span class="p">;</span>
+              <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">asf_data</span><span class="o">&#39;</span><span class="p">,</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+              <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="p">;</span>
+              <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">);</span>
+          <span class="n">else</span>
+              <span class="s">out.data=[]</span><span class="p">;</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+              <span class="s">out.file_name=[deblank(output_file_base(1,:))</span> <span class="s">&#39;_resid&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+              <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="n">n</span><span class="p">];</span>
+              <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">((</span><span class="n">Y</span><span class="o">-</span><span class="n">X</span><span class="o">*</span><span class="n">betahat</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+              <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="p">;</span>
+              <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">);</span>
+          <span class="k">end</span><span class="p">;</span>
+         <span class="c">% ASF - SHOULD ITERATE FOR DIFFERENT X</span>
+         <span class="c">% ASF - END CODE 2/18/06</span>
+<span class="c">%          out.data=[]; if isfield(out,&#39;nconj&#39;); out=rmfield(out,&#39;nconj&#39;); end</span>
+<span class="c">%          out.file_name=[deblank(output_file_base(1,:)) &#39;_resid&#39; ext];</span>
+<span class="c">%          out.dim=[numxs numys numslices n];</span>
+<span class="c">%          out.data=reshape((Y-X*betahat)&#39;,numxs,numys,n);</span>
+<span class="c">%          out.df=df.resid;</span>
+<span class="c">%          fmris_write_image(out,slice,1:n);</span>
+
+      <span class="n">end</span>  
+      <span class="s">if</span> <span class="s">which_stats(1,7)</span> <span class="s">|</span> <span class="s">which_stats(1,9)</span>
+         <span class="c">% ASF - ADDED CODE 1/18/06</span>
+         <span class="c">% ASF - SHOULD ITERATE FOR DIFFERENT X</span>
+         <span class="n">if</span> <span class="s">~isempty(covariate_files)</span>
+            <span class="n">error</span><span class="p">(</span> <span class="s">&#39;Whitened residuals and FWHM information cannot currently be exported with covariate_files.&#39;</span> <span class="p">)</span>
+         <span class="k">end</span><span class="p">;</span>
+         <span class="c">% ASF - END CODE 1/18/06</span>
+         <span class="n">wresid_slice</span><span class="p">=(</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">W</span><span class="o">/</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="p">)</span><span class="o">.*</span><span class="p">(</span><span class="n">Y</span><span class="o">-</span><span class="n">X</span><span class="o">*</span><span class="n">betahat</span><span class="p">))</span><span class="o">&#39;</span><span class="p">;</span>
+      <span class="n">end</span>
+      <span class="s">if</span> <span class="s">which_stats(1,7)</span> 
+         <span class="c">% ASF - ADDED CODE 1/18/06</span>
+         <span class="c">% ASF - SHOULD ITERATE FOR DIFFERENT X</span>
+         <span class="n">if</span> <span class="s">~isempty(covariate_files)</span>
+            <span class="n">error</span><span class="p">(</span> <span class="s">&#39;Whitened residuals cannot currently be exported with covariate_files.&#39;</span> <span class="p">)</span>
+         <span class="k">end</span><span class="p">;</span>
+         <span class="c">% ASF - END CODE 1/18/06</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=[];</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+         <span class="s">out.file_name=[deblank(output_file_base(1,:))</span> <span class="s">&#39;_wresid&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="n">n</span><span class="p">];</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">wresid_slice</span><span class="p">,</span><span class="n">numxs</span><span class="p">,</span><span class="n">numys</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+         <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=[</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span> <span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">];</span>
+         <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">);</span>
+      <span class="n">end</span>  
+      
+      <span class="s">if</span> <span class="s">which_stats(1,9)</span>
+         <span class="c">% ASF - ADDED CODE 1/18/06</span>
+         <span class="c">% ASF - SHOULD BE FIXED IF WHITENED RESIDUALS ARE ENABLED...</span>
+         <span class="n">if</span> <span class="s">~isempty(covariate_files)</span>
+            <span class="n">error</span><span class="p">(</span> <span class="s">&#39;FWHM information cannot currently be exported with covariate_files.&#39;</span> <span class="p">)</span>
+         <span class="k">end</span><span class="p">;</span>
+         <span class="c">% ASF - END CODE 1/18/06</span>
+
+         
+         <span class="c">% Finds an estimate of the fwhm for each of the 8 cube corners surrounding</span>
+         <span class="c">% a voxel, then averages. </span>
+         
+         <span class="n">if</span> <span class="s">slice==1</span>
+            
+            <span class="c">% setup for estimating the FWHM:</span>
+            <span class="n">I</span><span class="p">=</span><span class="n">numxs</span><span class="p">;</span>
+            <span class="n">J</span><span class="p">=</span><span class="n">numys</span><span class="p">;</span>
+            <span class="n">IJ</span><span class="p">=</span><span class="n">I</span><span class="o">*</span><span class="n">J</span><span class="p">;</span>
+            <span class="n">Im</span><span class="p">=</span><span class="n">I</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">Jm</span><span class="p">=</span><span class="n">J</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">nx</span><span class="p">=</span><span class="n">conv2</span><span class="p">(</span><span class="nb">ones</span><span class="p">(</span><span class="n">Im</span><span class="p">,</span><span class="n">J</span><span class="p">),</span><span class="nb">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">));</span>
+            <span class="n">ny</span><span class="p">=</span><span class="n">conv2</span><span class="p">(</span><span class="nb">ones</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">Jm</span><span class="p">),</span><span class="nb">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">));</span>
+            <span class="n">nxy</span><span class="p">=</span><span class="n">conv2</span><span class="p">(</span><span class="nb">ones</span><span class="p">(</span><span class="n">Im</span><span class="p">,</span><span class="n">Jm</span><span class="p">),</span><span class="nb">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+            <span class="n">f</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">);</span>
+            <span class="n">r</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">);</span>
+            <span class="n">Azz</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">);</span>
+            <span class="n">ip</span><span class="p">=[</span><span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">jp</span><span class="p">=[</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">is</span><span class="p">=[</span><span class="mi">1</span> <span class="o">-</span><span class="mi">1</span>  <span class="mi">1</span> <span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">js</span><span class="p">=[</span><span class="mi">1</span>  <span class="mi">1</span> <span class="o">-</span><span class="mi">1</span> <span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">D</span><span class="p">=</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">numslices</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">alphaf</span><span class="p">=</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">D</span><span class="p">);</span>
+            <span class="n">alphar</span><span class="p">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">Step</span><span class="p">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">prod</span><span class="p">(</span><span class="n">Steps</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">D</span><span class="p">)))</span>^<span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">D</span><span class="p">);</span>
+            <span class="n">Df</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">;</span>
+            <span class="n">dr</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="o">/</span><span class="n">Df</span><span class="p">;</span>
+            <span class="n">dv</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="o">-</span><span class="n">dr</span><span class="o">-</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">if</span> <span class="s">df.resid&gt;df_limit</span>
+               <span class="c">% constants for arbitrary filter method:</span>
+               <span class="n">biasf</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">alphaf</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> <span class="c">...</span>
+                  <span class="o">+</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphaf</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">dr</span>^<span class="p">(</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphaf</span><span class="p">);</span>
+               <span class="n">biasr</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">alphar</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> <span class="c">...</span>
+                  <span class="o">+</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphar</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">dr</span>^<span class="p">(</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphar</span><span class="p">);</span>
+            <span class="n">else</span>
+               <span class="s">%</span> <span class="s">constants</span> <span class="s">for</span> <span class="s">filter</span> <span class="s">aligned</span> <span class="s">with</span> <span class="s">axes</span> <span class="s">method:</span>
+               <span class="n">biasf</span><span class="p">=</span><span class="nb">exp</span><span class="p">((</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">alphaf</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">D</span><span class="o">+</span> <span class="c">...</span>
+                  <span class="o">+</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphaf</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">dr</span>^<span class="p">(</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphaf</span><span class="p">);</span>
+               <span class="n">biasr</span><span class="p">=</span><span class="nb">exp</span><span class="p">((</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">alphar</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">dv</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">D</span><span class="o">+</span> <span class="c">...</span>
+                  <span class="o">+</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphar</span><span class="p">)</span><span class="o">-</span><span class="nb">gammaln</span><span class="p">(</span><span class="n">Df</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">dr</span>^<span class="p">(</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphar</span><span class="p">);</span>
+            <span class="n">end</span>
+            <span class="s">consf=(4*log(2))^(-D*alphaf)/biasf*Step</span><span class="p">;</span>
+            <span class="n">consr</span><span class="p">=(</span><span class="mi">4</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>^<span class="p">(</span><span class="o">-</span><span class="n">D</span><span class="o">*</span><span class="n">alphar</span><span class="p">)</span><span class="o">/</span><span class="n">biasr</span><span class="p">;</span>
+            
+            <span class="n">u</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">wresid_slice</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+            <span class="n">ux</span><span class="p">=</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">uy</span><span class="p">=</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+            <span class="n">Axx</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">ux</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">Ayy</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">uy</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">dxx</span><span class="p">=([</span><span class="n">Axx</span><span class="p">;</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">J</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">J</span><span class="p">);</span> <span class="n">Axx</span><span class="p">])</span><span class="o">./</span><span class="n">nx</span><span class="p">;</span>
+            <span class="n">dyy</span><span class="p">=([</span><span class="n">Ayy</span>  <span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="mi">1</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="n">Ayy</span><span class="p">])</span><span class="o">./</span><span class="n">ny</span><span class="p">;</span>
+            <span class="n">if</span> <span class="s">D==2</span>
+               <span class="n">for</span> <span class="s">index=1:4</span>
+                  <span class="nb">i</span><span class="p">=(</span><span class="mi">1</span><span class="p">:</span><span class="n">Im</span><span class="p">)</span><span class="o">+</span><span class="n">ip</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="nb">j</span><span class="p">=(</span><span class="mi">1</span><span class="p">:</span><span class="n">Jm</span><span class="p">)</span><span class="o">+</span><span class="n">jp</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="n">axx</span><span class="p">=</span><span class="n">Axx</span><span class="p">(:,</span><span class="nb">j</span><span class="p">);</span>
+                  <span class="n">ayy</span><span class="p">=</span><span class="n">Ayy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:);</span>
+                  <span class="n">if</span> <span class="s">df.resid&gt;df_limit</span>
+                     <span class="n">axy</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">ux</span><span class="p">(:,</span><span class="nb">j</span><span class="p">,:)</span><span class="o">.*</span><span class="n">uy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:,:),</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">is</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">*</span><span class="n">js</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                     <span class="n">detlam</span><span class="p">=(</span><span class="n">axx</span><span class="o">.*</span><span class="n">ayy</span><span class="o">-</span><span class="n">axy</span><span class="o">.^</span><span class="mi">2</span><span class="p">);</span>
+                  <span class="n">else</span>
+                     <span class="s">detlam=axx.*ayy</span><span class="p">;</span>
+                  <span class="n">end</span>
+                  <span class="s">f(i,j)=f(i,j)+(detlam&gt;0).*(detlam+(detlam&lt;=0)).^alphaf</span><span class="p">;</span>
+                  <span class="n">r</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)=</span><span class="n">r</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">detlam</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.*</span><span class="p">(</span><span class="n">detlam</span><span class="o">+</span><span class="p">(</span><span class="n">detlam</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">))</span><span class="o">.^</span><span class="n">alphar</span><span class="p">;</span>
+               <span class="n">end</span>
+            <span class="s">end</span>
+         <span class="n">else</span> 
+            <span class="s">uz=reshape(wresid_slice,I,J,n)-u</span><span class="p">;</span>
+            <span class="n">dzz</span><span class="p">=</span><span class="n">Azz</span><span class="p">;</span>
+            <span class="n">Azz</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">uz</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">dzz</span><span class="p">=(</span><span class="n">dzz</span><span class="o">+</span><span class="n">Azz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">slice</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">));</span>
+            <span class="c">% The 4 upper cube corners:</span>
+            <span class="n">for</span> <span class="s">index=1:4</span>
+               <span class="nb">i</span><span class="p">=(</span><span class="mi">1</span><span class="p">:</span><span class="n">Im</span><span class="p">)</span><span class="o">+</span><span class="n">ip</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+               <span class="nb">j</span><span class="p">=(</span><span class="mi">1</span><span class="p">:</span><span class="n">Jm</span><span class="p">)</span><span class="o">+</span><span class="n">jp</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+               <span class="n">axx</span><span class="p">=</span><span class="n">Axx</span><span class="p">(:,</span><span class="nb">j</span><span class="p">);</span>
+               <span class="n">ayy</span><span class="p">=</span><span class="n">Ayy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:);</span>
+               <span class="n">azz</span><span class="p">=</span><span class="n">Azz</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">);</span>
+               <span class="n">if</span> <span class="s">df.resid&gt;df_limit</span>
+                  <span class="n">axy</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">ux</span><span class="p">(:,</span><span class="nb">j</span><span class="p">,:)</span><span class="o">.*</span><span class="n">uy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:,:),</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">is</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">*</span><span class="n">js</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="n">axz</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">ux</span><span class="p">(:,</span><span class="nb">j</span><span class="p">,:)</span><span class="o">.*</span><span class="n">uz</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">,:),</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">is</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="n">ayz</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">uy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:,:)</span><span class="o">.*</span><span class="n">uz</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">,:),</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">js</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="n">detlam</span><span class="p">=(</span><span class="n">axx</span><span class="o">.*</span><span class="n">ayy</span><span class="o">-</span><span class="n">axy</span><span class="o">.^</span><span class="mi">2</span><span class="p">)</span><span class="o">.*</span><span class="n">azz</span><span class="o">-</span><span class="p">(</span><span class="n">axz</span><span class="o">.*</span><span class="n">ayy</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">axy</span><span class="o">.*</span><span class="n">ayz</span><span class="p">)</span><span class="o">.*</span><span class="n">axz</span><span class="o">-</span><span class="n">axx</span><span class="o">.*</span><span class="n">ayz</span><span class="o">.^</span><span class="mi">2</span><span class="p">;</span>
+               <span class="n">else</span>
+                  <span class="s">detlam=axx.*ayy.*azz</span><span class="p">;</span>
+               <span class="n">end</span>
+               <span class="s">f(i,j)=f(i,j)+(detlam&gt;0).*(detlam+(detlam&lt;=0)).^alphaf</span><span class="p">;</span>
+               <span class="n">r</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)=</span><span class="n">r</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">detlam</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.*</span><span class="p">(</span><span class="n">detlam</span><span class="o">+</span><span class="p">(</span><span class="n">detlam</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">))</span><span class="o">.^</span><span class="n">alphar</span><span class="p">;</span>
+            <span class="n">end</span>
+            <span class="s">f=consf/((slice&gt;2)+1)*f./nxy</span><span class="p">;</span>
+            <span class="n">r</span><span class="p">=</span><span class="n">consr</span><span class="o">/</span><span class="p">((</span><span class="n">slice</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="o">./</span><span class="n">nxy</span><span class="p">;</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=[];</span> <span class="n">if</span> <span class="s">isfield(out,&#39;nconj&#39;)</span><span class="p">;</span> <span class="n">out</span><span class="p">=</span><span class="n">rmfield</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&#39;nconj&#39;</span><span class="p">);</span> <span class="n">end</span>
+            <span class="s">out.file_name=[deblank(output_file_base(1,:))</span> <span class="s">&#39;_fwhm&#39;</span> <span class="s">ext]</span><span class="p">;</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">dim</span><span class="p">=[</span><span class="n">numxs</span> <span class="n">numys</span> <span class="n">numslices</span> <span class="mi">5</span><span class="p">];</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="n">f</span><span class="o">.*</span><span class="p">(</span><span class="n">f</span><span class="o">&lt;</span><span class="mi">50</span><span class="p">)</span><span class="o">+</span><span class="mi">50</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">&gt;=</span><span class="mi">50</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">df</span><span class="p">=[</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span> <span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">];</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="n">r</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="n">dxx</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="n">dyy</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="n">dzz</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
+            
+            <span class="n">f</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">);</span>
+            <span class="n">r</span><span class="p">=</span><span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">);</span>
+            <span class="n">u</span><span class="p">=</span><span class="nb">reshape</span><span class="p">(</span><span class="n">wresid_slice</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+            <span class="n">ux</span><span class="p">=</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">uy</span><span class="p">=</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+            <span class="n">Axx</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">ux</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">Ayy</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">uy</span><span class="o">.^</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">dxx</span><span class="p">=([</span><span class="n">Axx</span><span class="p">;</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">J</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">J</span><span class="p">);</span> <span class="n">Axx</span><span class="p">])</span><span class="o">./</span><span class="n">nx</span><span class="p">;</span>
+            <span class="n">dyy</span><span class="p">=([</span><span class="n">Ayy</span>  <span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="mi">1</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="nb">zeros</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="n">Ayy</span><span class="p">])</span><span class="o">./</span><span class="n">ny</span><span class="p">;</span>
+            <span class="c">% The 4 lower cube corners:</span>
+            <span class="n">for</span> <span class="s">index=1:4</span>
+               <span class="nb">i</span><span class="p">=(</span><span class="mi">1</span><span class="p">:</span><span class="n">Im</span><span class="p">)</span><span class="o">+</span><span class="n">ip</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+               <span class="nb">j</span><span class="p">=(</span><span class="mi">1</span><span class="p">:</span><span class="n">Jm</span><span class="p">)</span><span class="o">+</span><span class="n">jp</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+               <span class="n">axx</span><span class="p">=</span><span class="n">Axx</span><span class="p">(:,</span><span class="nb">j</span><span class="p">);</span>
+               <span class="n">ayy</span><span class="p">=</span><span class="n">Ayy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:);</span>
+               <span class="n">azz</span><span class="p">=</span><span class="n">Azz</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">);</span>
+               <span class="n">if</span> <span class="s">df.resid&gt;df_limit</span>
+                  <span class="n">axy</span><span class="p">=</span><span class="n">sum</span><span class="p">(</span><span class="n">ux</span><span class="p">(:,</span><span class="nb">j</span><span class="p">,:)</span><span class="o">.*</span><span class="n">uy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:,:),</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">is</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">*</span><span class="n">js</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="n">axz</span><span class="p">=</span><span class="o">-</span><span class="n">sum</span><span class="p">(</span><span class="n">ux</span><span class="p">(:,</span><span class="nb">j</span><span class="p">,:)</span><span class="o">.*</span><span class="n">uz</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">,:),</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">is</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="n">ayz</span><span class="p">=</span><span class="o">-</span><span class="n">sum</span><span class="p">(</span><span class="n">uy</span><span class="p">(</span><span class="nb">i</span><span class="p">,:,:)</span><span class="o">.*</span><span class="n">uz</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">,:),</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">js</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+                  <span class="n">detlam</span><span class="p">=(</span><span class="n">axx</span><span class="o">.*</span><span class="n">ayy</span><span class="o">-</span><span class="n">axy</span><span class="o">.^</span><span class="mi">2</span><span class="p">)</span><span class="o">.*</span><span class="n">azz</span><span class="o">-</span><span class="p">(</span><span class="n">axz</span><span class="o">.*</span><span class="n">ayy</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">axy</span><span class="o">.*</span><span class="n">ayz</span><span class="p">)</span><span class="o">.*</span><span class="n">axz</span><span class="o">-</span><span class="n">axx</span><span class="o">.*</span><span class="n">ayz</span><span class="o">.^</span><span class="mi">2</span><span class="p">;</span>
+               <span class="n">else</span>
+                  <span class="s">detlam=axx.*ayy.*azz</span><span class="p">;</span>
+               <span class="n">end</span>
+               <span class="s">f(i,j)=f(i,j)+(detlam&gt;0).*(detlam+(detlam&lt;=0)).^alphaf</span><span class="p">;</span>
+               <span class="n">r</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)=</span><span class="n">r</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">detlam</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.*</span><span class="p">(</span><span class="n">detlam</span><span class="o">+</span><span class="p">(</span><span class="n">detlam</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">))</span><span class="o">.^</span><span class="n">alphar</span><span class="p">;</span>
+            <span class="n">end</span>
+         <span class="s">end</span>
+         <span class="n">if</span> <span class="s">slice==numslices</span>
+            <span class="n">f</span><span class="p">=</span><span class="n">consf</span><span class="o">*</span><span class="n">f</span><span class="o">./</span><span class="n">nxy</span><span class="p">;</span>
+            <span class="n">r</span><span class="p">=</span><span class="n">consr</span><span class="o">*</span><span class="n">r</span><span class="o">./</span><span class="n">nxy</span><span class="p">;</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="n">f</span><span class="o">.*</span><span class="p">(</span><span class="n">f</span><span class="o">&lt;</span><span class="mi">50</span><span class="p">)</span><span class="o">+</span><span class="mi">50</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">&gt;=</span><span class="mi">50</span><span class="p">);</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="n">r</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="n">dxx</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="n">dyy</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">data</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="n">Azz</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">fmris_write_image</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">slice</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
+         <span class="n">end</span>
+      <span class="s">end</span> <span class="s">%</span> <span class="s">of</span> <span class="s">if</span> <span class="s">which_stats(1,9)</span>
+      
+   <span class="n">end</span>
+<span class="s">%</span> <span class="s">else</span>
+<span class="c">%    % If degrees of freedom is zero, estimate effects by least squares,</span>
+<span class="c">%    % and use the standard errors to estimate the sdeffect.</span>
+<span class="c">%       ...</span>
+<span class="c">%    end</span>
+   
+<span class="n">end</span>
+
+<span class="s">return</span>
+
+
+
+<span class="k">function</span><span class="w"> </span>[df, ker_x, ker_y, K]<span class="p">=</span><span class="nf">regularized_df</span><span class="p">(</span>fwhm_varatio,D,Steps,numslices,df,fwhm_data<span class="p">);</span>
+
+<span class="n">if</span> <span class="s">fwhm_varatio&gt;0</span>
+   <span class="n">fwhm_x</span><span class="p">=</span><span class="n">fwhm_varatio</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">Steps</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+   <span class="n">ker_x</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="nb">ceil</span><span class="p">(</span><span class="n">fwhm_x</span><span class="p">):</span><span class="nb">ceil</span><span class="p">(</span><span class="n">fwhm_x</span><span class="p">))</span><span class="o">.^</span><span class="mi">2</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">fwhm_x</span>^<span class="mi">2</span><span class="p">);</span>
+   <span class="n">ker_x</span><span class="p">=</span><span class="n">ker_x</span><span class="o">/</span><span class="n">sum</span><span class="p">(</span><span class="n">ker_x</span><span class="p">);</span>
+   <span class="n">fwhm_y</span><span class="p">=</span><span class="n">fwhm_varatio</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">Steps</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+   <span class="n">ker_y</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="nb">ceil</span><span class="p">(</span><span class="n">fwhm_y</span><span class="p">):</span><span class="nb">ceil</span><span class="p">(</span><span class="n">fwhm_y</span><span class="p">))</span><span class="o">.^</span><span class="mi">2</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">fwhm_y</span>^<span class="mi">2</span><span class="p">);</span>
+   <span class="n">ker_y</span><span class="p">=</span><span class="n">ker_y</span><span class="o">/</span><span class="n">sum</span><span class="p">(</span><span class="n">ker_y</span><span class="p">);</span>
+   <span class="n">fwhm_z</span><span class="p">=</span><span class="n">fwhm_varatio</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">Steps</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
+   <span class="n">ker_z</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mi">0</span><span class="p">:(</span><span class="n">numslices</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.^</span><span class="mi">2</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">fwhm_z</span>^<span class="mi">2</span><span class="p">);</span>
+   <span class="n">K</span><span class="p">=</span><span class="nb">toeplitz</span><span class="p">(</span><span class="n">ker_z</span><span class="p">);</span>
+   <span class="n">K</span><span class="p">=</span><span class="n">K</span><span class="o">./</span><span class="p">(</span><span class="nb">ones</span><span class="p">(</span><span class="n">numslices</span><span class="p">)</span><span class="o">*</span><span class="n">K</span><span class="p">);</span>
+   <span class="n">df_indep</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="o">/</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">ker_x</span><span class="o">.^</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">sum</span><span class="p">(</span><span class="n">ker_y</span><span class="o">.^</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">sum</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">K</span><span class="o">.^</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="n">numslices</span><span class="p">);</span>
+   <span class="n">df_correl</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">fwhm_varatio</span><span class="o">/</span><span class="n">fwhm_data</span><span class="p">)</span>^<span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>^<span class="p">(</span><span class="n">D</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+   <span class="n">df</span><span class="p">.</span><span class="n">sdratio</span><span class="p">=</span><span class="n">min</span><span class="p">(</span><span class="n">df_indep</span><span class="p">,</span><span class="n">df_correl</span><span class="p">);</span>
+   <span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">=</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">df</span><span class="p">.</span><span class="n">sdratio</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="n">df</span><span class="p">.</span><span class="n">fixed</span><span class="p">);</span>
+<span class="n">else</span>
+   <span class="s">ker_x=1</span><span class="p">;</span>
+   <span class="n">ker_y</span><span class="p">=</span><span class="mi">1</span><span class="p">;</span>
+   <span class="n">K</span><span class="p">=</span><span class="nb">eye</span><span class="p">(</span><span class="n">numslices</span><span class="p">);</span>
+   <span class="n">df</span><span class="p">.</span><span class="n">sdratio</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="p">;</span>
+   <span class="n">df</span><span class="p">.</span><span class="n">t</span><span class="p">=</span><span class="n">df</span><span class="p">.</span><span class="n">resid</span><span class="p">;</span>
+<span class="n">end</span>
+
+<span class="s">return</span>
+</code></pre></div>
+
+
+</figure>
+
+<p>In addition to my version of multistatic.m, other groups have implemented some version of a voxelwise covariate. I think you can do it with randomise in FSL, and using some package for SPM. Im not really sure as I use my own code, but if you get motivated to figure it out let me know what you find.</p>
+<p>As always, feel free to contact me if you have any questions.
+:-Drew</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        <hr class="divider-short"/>
+        <!-- Disqus goes here -->
+        <!-- <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">Disqus goes here</div>
+        </section>
+        -->
+      </div>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    <footer id="footer" class="her-row">
+      <div class="container">
+
+<div class="row">
+  <div class="col-sm span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+
+           <li>
+             <a href="carly-m-drzewiecki.html">Carly M. Drzewiecki</a>
+           </li>
+           <li>
+             <a href="poirier-et-al-neuroimage-2021.html">Poirier et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="shackman-fox-ajp-2020.html">Shackman & Fox, AJP - 2020</a>
+           </li>
+           <li>
+             <a href="fox-et-al-neuroimage-2021.html">Fox et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="daniel-koh.html">Daniel Koh</a>
+           </li>
+    </ul>
+    <h2><a href="/archives">archives</a></h2>
+  </div>
+  <div class="col-sm span4">
+<h2>twitter</h2>
+
+<a class="twitter-timeline" data-dnt="true" data-height="300" href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw">Tweets by foxdotdrew</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<a href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-dnt="true" data-show-count="false">Follow @foxdotdrew</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </div>
+  <div class="col-sm span2">
+<div class="col-sm span2">
+  <h2>categories</h2>
+  <div class="meta" style="margin-bottom: 30px;">
+ 
+              <a href="/category/cv.html" class="category">cv (1)</a>
+ 
+              <a href="/category/news.html" class="category">news (3)</a>
+              <a href="/category/people.html" class="category">people (6)</a>
+ 
+              <a href="/category/posters.html" class="category">posters (48)</a>
+ 
+              <a href="/category/publications.html" class="category">publications (80)</a>
+ 
+              <a href="/category/thoughts.html" class="category">thoughts (6)</a>
+ 
+              <a href="/category/tutorials.html" class="category">tutorials (7)</a>
+  </div>
+
+
+  <p style="text-align: center;">
+  <a href="https://ds.lib.ucdavis.edu" rel="tooltip" title="DataLab UC Davis"><img title="DataLab UC Davis" alt="DataLab icon" width=100 height=100 src="https://asfox.github.io/images/datalab_centered-logo-full-color-rgb.png"></a>
+  </p>
+
+
+  <div class="social-icon-list">
+    <a title="Twitter" href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+    <a title="GitHub" href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+    <a title="E-Mail" href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+  </div>
+</div>
+
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/"><h4>Home</h4></a>
+          </div>
+
+          <div class="col-md-2">
+            <div class="social-icon-list">
+              <a href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+
+              <a href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+
+
+              <a href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+            </div>
+          </div>
+          <div class="pull-right">
+            <h4>Powered by <a href="http://blog.getpelican.com/">Pelican</a>. Originally designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a> and adapted by Drew Fox.</h4>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

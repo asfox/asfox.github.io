@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Visualizing the correlation of two volumes.</title>
+  <meta name="author" content="Drew Fox">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="Visualizing the correlation of two volumes. written June 05, 2013">
+
+  <link rel="canonical" href="/visualizing-the-correlation-of-two-volumes.html">
+
+
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+  <link href="/theme/css/bootstrap.min.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/screen.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/tomorrow.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+
+
+  <script>window.jQuery || document.write('<script src="/theme/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+  <script src="/theme/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+  <!-- <script src="/theme/javascripts/jquery.tweet.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/jquery.instagram.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/custom.js" type="text/javascript"></script>
+  -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  
+</head>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/theme/images/home.png"/>
+    </a>
+
+    <div class='my_backdrop'>
+
+<article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 my_junk">
+        <h1>Visualizing the correlation of two volumes.</h1>
+        <div class="meta">
+          written <time datetime="2013-06-05T15:58:00-07:00">June 05, 2013</time>
+        </div>
+        <br>
+            <p>In neuroimaging, we often consider how a single variable affects every region of the brain, but rarely consider how these maps relate to each other. I wrote a little python code that lets me look that the correlation between two brain volumes.</p>
+<!--more-->
+
+<p>For example, here is a picture that describes the relationshp between two statistical images that are negatively correlated.</p>
+<p><img class="center" src="https://asfox.github.io/images/file1_vs_file2.png" width="400" height="400" title="File1 vs. File2 An image 2D histogram between two .nii files." alt="File1 vs. File2 An image 2D histogram between two .nii files."></p>
+<p>This image was created with teh command:</p>
+<div class="highlight"><pre><span></span><code>python plotImage2Image_2dHist.py -x file1.nii -y file2.nii -fx <span class="m">0</span> fy <span class="m">0</span>
+</code></pre></div>
+
+
+<p>I have used this code in a number of ways, and would be excited to hear how you think it might be useful. If you want to download the code, you can skip to the <a href="#allCode">bottom of the page</a>. It may require a bit of python knowledge, but feel free to let me know if you have any problems.</p>
+<p>Otherwise, here a bit of a tutorial showing how the code works.  :-D</p>
+<h2 id="walkthrough-the-code">Walkthrough the code.<a class="headerlink" href="#walkthrough-the-code" title="Permanent link">&para;</a></h2>
+<p>First off this code will require other packages, including <a href="http://nipy.sourceforge.net/nibabel/">Nibabel</a>, <a href="http://www.numpy.org/">Numpy</a>, and <a href="http://matplotlib.org/">matplotlib</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</code></pre></div>
+
+
+<p>Some parts will also require the NullFormatter from <a href="http://matplotlib.org/">matplotlib</a> and the spearmans correlation from <a href="http://www.scipy.org/">scipy</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">spearmanr</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">NullFormatter</span>
+</code></pre></div>
+
+
+<p>First you will need to load two files using <a href="http://nipy.sourceforge.net/nibabel/">Nibabel</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">nii</span><span class="p">)</span>
+<span class="n">img2</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file2</span><span class="o">.</span><span class="n">nii</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Once you have images loaded, you will need to access their data.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># get image data.</span>
+<span class="n">img_data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="n">img2_data</span> <span class="o">=</span> <span class="n">img2</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p>Because the correlation that we are looking at doesnt care where these voxels are in space, we can get rid of that information here and convert our volume images to 1D vectors. This makes the rest of the code a little simpler.</p>
+<div class="highlight"><pre><span></span><code><span class="n">x_data</span> <span class="o">=</span> <span class="n">img_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">img_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">img_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">img_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">img2_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x_data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y_data</span>
+</code></pre></div>
+
+
+<p>Now we can start the plotting process with a rectangular Figure. This plot will have three parts, one 2D histogram and a histogram for each axis.</p>
+<div class="highlight"><pre><span></span><code><span class="n">mainFig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">white</span><span class="p">)</span>
+
+<span class="c1"># define some gridding.</span>
+<span class="n">axHist2d</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">colspan</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">8</span> <span class="p">)</span>
+<span class="n">axHistx</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">colspan</span><span class="o">=</span><span class="mi">8</span> <span class="p">)</span>
+<span class="n">axHisty</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">8</span> <span class="p">)</span>
+</code></pre></div>
+
+
+<p>Here we create the 2D Histogram, which represents the scatter plot. This histogram will be have high values in bins where many points overlap, so that we can quickly plot a very dense dataset.</p>
+<div class="highlight"><pre><span></span><code><span class="n">H</span><span class="p">,</span> <span class="n">xedges</span><span class="p">,</span> <span class="n">yedges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">axHist2d</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">nearest</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">auto</span> <span class="p">)</span>
+</code></pre></div>
+
+
+<p>Now we can make histograms for x and y seperately. These histograms will use the same bins as the 2D histogram, and fit on each axis.</p>
+<div class="highlight"><pre><span></span><code><span class="n">axHistx</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">xedges</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">blue</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span> <span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">yedges</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">blue</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="n">horizontal</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Draw the plot!</p>
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p>This is basically it. The rest is just a bunch of extra stuff that I did to make it pretty. You can learn more about each of these below.</p>
+<h2 id="add-a-correlation">Add a Correlation<a class="headerlink" href="#add-a-correlation" title="Permanent link">&para;</a></h2>
+<p>I wanted my plot to give me a statistic on the relation between the two data-sets. Here is how you add the <span class="math">\(r\)</span> and <span class="math">\(\rho\)</span> values to the top of the image, like so.</p>
+<div class="highlight"><pre><span></span><code><span class="n">mainFig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span><span class="o">.</span><span class="mi">95</span><span class="p">,</span><span class="n">r</span><span class="o">=+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span><span class="o">+</span><span class="p">;</span> <span class="n">rho</span><span class="o">=+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">spearmanr</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">)),</span> <span class="n">style</span><span class="o">=</span><span class="n">italic</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span> <span class="p">)</span>
+</code></pre></div>
+
+
+<h2 id="exclude-some-points">Exclude some points<a class="headerlink" href="#exclude-some-points" title="Permanent link">&para;</a></h2>
+<p>In many cases, NaNs, Zeros and noise make us want to threshold or filter the maps to exclude irrelavent data. I did this by simply filtering the list of data to include in the plotting.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Exclude data that isnt finite.</span>
+<span class="n">x_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+<span class="n">y_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+
+<span class="c1"># Threhold the X axis for values &gt; 0</span>
+<span class="n">x_thr</span> <span class="o">=</span> <span class="n">x_data</span><span class="o">&gt;</span><span class="mf">0.0</span>
+
+<span class="c1"># Filter the Y axis to exclude values = 0</span>
+<span class="n">y_fil</span> <span class="o">=</span> <span class="n">y_data</span><span class="o">!=</span><span class="mi">0</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">y_data</span><span class="p">[</span><span class="n">x_in</span> <span class="o">&amp;</span> <span class="n">y_in</span> <span class="o">&amp;</span> <span class="n">x_thr</span> <span class="o">&amp;</span> <span class="n">y_fil</span> <span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x_data</span><span class="p">[</span><span class="n">x_in</span> <span class="o">&amp;</span> <span class="n">y_in</span> <span class="o">&amp;</span> <span class="n">x_thr</span> <span class="o">&amp;</span> <span class="n">y_fil</span> <span class="p">]</span>
+</code></pre></div>
+
+
+<h2 id="make-it-pretty">Make it pretty!<a class="headerlink" href="#make-it-pretty" title="Permanent link">&para;</a></h2>
+<p>I have a love hate relationship with <code>matplotlib</code>. I love it, but its defaults are so ugly. Here I make my plots have the same axis limits, and remove a bunch of extra lables.</p>
+<p>Lock the axes.</p>
+<div class="highlight"><pre><span></span><code><span class="n">axHistx</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span> <span class="p">[</span><span class="n">xedges</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xedges</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span> <span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span> <span class="p">[</span><span class="n">yedges</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">yedges</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span> <span class="p">)</span>
+<span class="n">axHist2d</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span> <span class="p">[</span> <span class="n">axHist2d</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axHist2d</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="p">]</span> <span class="p">)</span>
+</code></pre></div>
+
+
+<p>Remove some labels.</p>
+<div class="highlight"><pre><span></span><code><span class="n">nullfmt</span>   <span class="o">=</span> <span class="n">NullFormatter</span><span class="p">()</span>
+<span class="n">axHistx</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+<span class="n">axHistx</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Remove some axis spines.</p>
+<div class="highlight"><pre><span></span><code><span class="n">axHistx</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">top</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axHistx</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">right</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axHistx</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">top</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">bottom</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">right</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Remove some ticks.</p>
+<div class="highlight"><pre><span></span><code><span class="n">axHistx</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axHistx</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+</code></pre></div>
+
+
+<p>Label 2d hist axes.</p>
+<div class="highlight"><pre><span></span><code><span class="n">myTicks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+<span class="n">axHist2d</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">myTicks</span><span class="p">)</span>
+<span class="n">axHist2d</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">myTicks</span><span class="p">)</span>
+<span class="n">axHist2d</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xedges</span><span class="p">[</span><span class="n">myTicks</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">axHist2d</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">yedges</span><span class="p">[</span><span class="n">myTicks</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+
+
+<h2 id="label-the-axes">Label the axes.<a class="headerlink" href="#label-the-axes" title="Permanent link">&para;</a></h2>
+<p>No plot is complete without labels. :-)</p>
+<p>Set titles.</p>
+<div class="highlight"><pre><span></span><code><span class="n">axHist2d</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">File1</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">axHist2d</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">File2</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">axHistx</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">File1</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+<span class="n">axHisty</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">File2</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="n">top</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="n">center</span> <span class="p">)</span>
+</code></pre></div>
+
+
+<p>Set the window title.</p>
+<div class="highlight"><pre><span></span><code><span class="n">mainFig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span> <span class="p">(</span><span class="n">File1</span> <span class="n">vs</span><span class="o">.</span> <span class="n">File2</span><span class="p">)</span> <span class="p">)</span>
+</code></pre></div>
+
+
+<h2 id="a-idallcodeall-the-code">&lt;a id=allCode></a>All the code!<a class="headerlink" href="#a-idallcodeall-the-code" title="Permanent link">&para;</a></h2>
+<p>You probably just want the code. Here is the whole lot, which can be downloaded with the link on the top right and run on the commandline. If you have any troubles, try starting at the top.</p>
+<div class="highlight"><pre><span></span><code>python plotImage2Image_2dHist.py -h
+</code></pre></div>
+
+
+<figure class='code'>
+<figcaption><span class="liquid-tags-code-title">Plot two volumes against each other in Python. codec:utf8</span><span class="liquid-tags-code-filename">plotImage2Image_2dHist.py</span><a href='/downloads/code/plotImage2Image_2dHist.py'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">spearmanr</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">NullFormatter</span>
+
+<span class="k">def</span> <span class="nf">plotImage2Image_2dHist</span><span class="p">(</span> <span class="n">MapX</span><span class="p">,</span> <span class="n">MapY</span><span class="p">,</span> <span class="n">thresholdX</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thresholdY</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logY</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logX</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filterX</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filterY</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span> <span class="p">):</span>
+
+    <span class="c1"># load image files.</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">MapX</span><span class="p">)</span>
+    <span class="n">img2</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">MapY</span><span class="p">)</span>
+    
+
+    <span class="c1"># get image data.</span>
+    <span class="n">img_data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+    <span class="n">img2_data</span> <span class="o">=</span> <span class="n">img2</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+
+    
+    <span class="c1"># vectorize image data.</span>
+    <span class="n">x_data</span> <span class="o">=</span> <span class="n">img_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">img_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">img_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">img_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">y_data</span> <span class="o">=</span> <span class="n">img2_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    
+
+    <span class="c1"># decide which points to include</span>
+    <span class="n">x_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+    <span class="n">y_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">thresholdX</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x_thr</span> <span class="o">=</span> <span class="n">x_data</span><span class="o">&gt;</span><span class="nb">float</span><span class="p">(</span><span class="n">thresholdX</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x_thr</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">thresholdY</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">y_thr</span> <span class="o">=</span> <span class="n">y_data</span><span class="o">&gt;</span><span class="nb">float</span><span class="p">(</span><span class="n">thresholdY</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">y_thr</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">filterX</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x_fil</span> <span class="o">=</span> <span class="n">x_data</span><span class="o">!=</span><span class="n">filterX</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x_fil</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">filterY</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">y_fil</span> <span class="o">=</span> <span class="n">y_data</span><span class="o">!=</span><span class="n">filterY</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">y_fil</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y_data</span><span class="p">[</span><span class="n">x_in</span> <span class="o">&amp;</span> <span class="n">y_in</span> <span class="o">&amp;</span> <span class="n">x_thr</span> <span class="o">&amp;</span> <span class="n">y_thr</span> <span class="o">&amp;</span> <span class="n">x_fil</span> <span class="o">&amp;</span> <span class="n">y_fil</span> <span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x_data</span><span class="p">[</span><span class="n">x_in</span> <span class="o">&amp;</span> <span class="n">y_in</span> <span class="o">&amp;</span> <span class="n">x_thr</span> <span class="o">&amp;</span> <span class="n">y_thr</span> <span class="o">&amp;</span> <span class="n">x_fil</span> <span class="o">&amp;</span> <span class="n">y_fil</span> <span class="p">]</span>
+
+
+    <span class="c1"># log scale if you like.</span>
+    <span class="k">if</span> <span class="n">logY</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">logX</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+
+    <span class="c1"># start with a rectangular Figure</span>
+    <span class="n">mainFig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># define some gridding.</span>
+    <span class="n">axHist2d</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">colspan</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">8</span> <span class="p">)</span>
+    <span class="n">axHistx</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">colspan</span><span class="o">=</span><span class="mi">8</span> <span class="p">)</span>
+    <span class="n">axHisty</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">8</span> <span class="p">)</span>
+
+    <span class="c1"># the 2D Histogram, which represents the &#39;scatter&#39; plot:</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">xedges</span><span class="p">,</span> <span class="n">yedges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span><span class="n">bins</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span> <span class="p">)</span>
+    
+    <span class="c1"># make histograms for x and y seperately.</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">xedges</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;None&#39;</span> <span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">yedges</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># print some correlation coefficients at the top of the image.</span>
+    <span class="n">mainFig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span><span class="o">.</span><span class="mi">95</span><span class="p">,</span><span class="s1">&#39;r=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; rho=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">spearmanr</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">)),</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;italic&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span> <span class="p">)</span>
+
+    <span class="c1"># set axes</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span> <span class="p">[</span><span class="n">xedges</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xedges</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span> <span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span> <span class="p">[</span><span class="n">yedges</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">yedges</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span> <span class="p">)</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span> <span class="p">[</span> <span class="n">axHist2d</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axHist2d</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="p">]</span> <span class="p">)</span>
+
+    <span class="c1"># remove some labels</span>
+    <span class="n">nullfmt</span>   <span class="o">=</span> <span class="n">NullFormatter</span><span class="p">()</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">nullfmt</span><span class="p">)</span>
+
+    <span class="c1"># remove some axes lines</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># remove some ticks</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="c1"># label 2d hist axes</span>
+    <span class="n">myTicks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">myTicks</span><span class="p">)</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">myTicks</span><span class="p">)</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xedges</span><span class="p">[</span><span class="n">myTicks</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">yedges</span><span class="p">[</span><span class="n">myTicks</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
+    
+    <span class="c1"># set titles</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">MapX</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">axHist2d</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">MapY</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">axHistx</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">MapX</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+    <span class="n">axHisty</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">MapY</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span> <span class="p">)</span>
+    
+    <span class="c1"># set the window title</span>
+    <span class="n">mainFig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span> <span class="p">(</span><span class="n">MapX</span> <span class="o">+</span> <span class="s1">&#39; vs. &#39;</span> <span class="o">+</span> <span class="n">MapY</span><span class="p">)</span> <span class="p">)</span>
+    
+    <span class="c1"># actually draw the plot.</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">argparse</span>
+    
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Plot two images against each other with a 2D histogram.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-x&#39;</span><span class="p">,</span><span class="s1">&#39;--MapX&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;X axis image&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-y&#39;</span><span class="p">,</span><span class="s1">&#39;--MapY&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Y axis image&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span><span class="s1">&#39;--bins&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number of Histogram Bins&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-tx&#39;</span><span class="p">,</span><span class="s1">&#39;--thresholdX&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Lower Threshold for X&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ty&#39;</span><span class="p">,</span><span class="s1">&#39;--thresholdY&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Lower Threshold for Y&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-fx&#39;</span><span class="p">,</span><span class="s1">&#39;--filterX&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Exclude Number for X&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-fy&#39;</span><span class="p">,</span><span class="s1">&#39;--filterY&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Exclude Number for Y&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-lx&#39;</span><span class="p">,</span><span class="s1">&#39;--logX&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;LogY Flag&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ly&#39;</span><span class="p">,</span><span class="s1">&#39;--logY&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;LogY Flag&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">plotImage2Image_2dHist</span><span class="p">(</span> <span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="p">)</span>
+</code></pre></div>
+
+
+</figure>
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        <hr class="divider-short"/>
+        <!-- Disqus goes here -->
+        <!-- <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">Disqus goes here</div>
+        </section>
+        -->
+      </div>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    <footer id="footer" class="her-row">
+      <div class="container">
+
+<div class="row">
+  <div class="col-sm span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+
+           <li>
+             <a href="carly-m-drzewiecki.html">Carly M. Drzewiecki</a>
+           </li>
+           <li>
+             <a href="poirier-et-al-neuroimage-2021.html">Poirier et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="shackman-fox-ajp-2020.html">Shackman & Fox, AJP - 2020</a>
+           </li>
+           <li>
+             <a href="fox-et-al-neuroimage-2021.html">Fox et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="daniel-koh.html">Daniel Koh</a>
+           </li>
+    </ul>
+    <h2><a href="/archives">archives</a></h2>
+  </div>
+  <div class="col-sm span4">
+<h2>twitter</h2>
+
+<a class="twitter-timeline" data-dnt="true" data-height="300" href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw">Tweets by foxdotdrew</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<a href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-dnt="true" data-show-count="false">Follow @foxdotdrew</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </div>
+  <div class="col-sm span2">
+<div class="col-sm span2">
+  <h2>categories</h2>
+  <div class="meta" style="margin-bottom: 30px;">
+ 
+              <a href="/category/cv.html" class="category">cv (1)</a>
+ 
+              <a href="/category/news.html" class="category">news (3)</a>
+              <a href="/category/people.html" class="category">people (6)</a>
+ 
+              <a href="/category/posters.html" class="category">posters (48)</a>
+ 
+              <a href="/category/publications.html" class="category">publications (80)</a>
+ 
+              <a href="/category/thoughts.html" class="category">thoughts (6)</a>
+ 
+              <a href="/category/tutorials.html" class="category">tutorials (7)</a>
+  </div>
+
+
+  <p style="text-align: center;">
+  <a href="https://ds.lib.ucdavis.edu" rel="tooltip" title="DataLab UC Davis"><img title="DataLab UC Davis" alt="DataLab icon" width=100 height=100 src="https://asfox.github.io/images/datalab_centered-logo-full-color-rgb.png"></a>
+  </p>
+
+
+  <div class="social-icon-list">
+    <a title="Twitter" href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+    <a title="GitHub" href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+    <a title="E-Mail" href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+  </div>
+</div>
+
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/"><h4>Home</h4></a>
+          </div>
+
+          <div class="col-md-2">
+            <div class="social-icon-list">
+              <a href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+
+              <a href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+
+
+              <a href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+            </div>
+          </div>
+          <div class="pull-right">
+            <h4>Powered by <a href="http://blog.getpelican.com/">Pelican</a>. Originally designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a> and adapted by Drew Fox.</h4>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

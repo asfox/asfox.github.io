@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>What is a genetic correlation?</title>
+  <meta name="author" content="Drew Fox">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="What is a genetic correlation? written April 24, 2013">
+
+  <link rel="canonical" href="/what-is-a-genetic-correlation.html">
+
+
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+  <link href="/theme/css/bootstrap.min.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/screen.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/tomorrow.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+
+
+  <script>window.jQuery || document.write('<script src="/theme/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+  <script src="/theme/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+  <!-- <script src="/theme/javascripts/jquery.tweet.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/jquery.instagram.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/custom.js" type="text/javascript"></script>
+  -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  
+</head>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/theme/images/home.png"/>
+    </a>
+
+    <div class='my_backdrop'>
+
+<article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 my_junk">
+        <h1>What is a genetic correlation?</h1>
+        <div class="meta">
+          written <time datetime="2013-04-24T01:02:00-07:00">April 24, 2013</time>
+        </div>
+        <br>
+            <p>Much what we do as affective and social scientists is correlational. Its funny that we rarely think about the <em>source</em> of our correlations. We often think about the genetic or environmental effects on traits that we study, but rarely consider these influences on our favorite correlations. The genetic correlation is an estimate of the additive genetic effect that is shared between our pair of traits. For example, self-reported mood and physiological reactivity could both be heritable, but their genetic correlation can tell you if they are likely to share the same genes.</p>
+<!--more-->
+
+<p>It is interesting to think about source of the correlation between two phenotypic traits. In particular, you could consider the correlation between two variables as the sum of the genetic and environmental contributions to these effects.</p>
+<blockquote>
+<p>
+<div class="math">$$ \rho = \rho_g + \rho_e $$</div>
+</p>
+</blockquote>
+<p>Using the framework for estimating heritability, we can estimate the genetic heritability for two variables.</p>
+<h2 id="what-is-shared-heritability">What is shared heritability?<a class="headerlink" href="#what-is-shared-heritability" title="Permanent link">&para;</a></h2>
+<p>Even when you can show that variables <span class="math">\(X\)</span> (e.g. height) and <span class="math">\(Y\)</span> (e.g. eye-color) are heritable in the same population, this obviously does not imply that they rely on the same genes. It could be that these two traits are passed on by different sets of genes, such that while you inherit your mothers height, your sibling might inherit her eye-color. To determine if two traits are likely to share the same genes you can compute the genetic heritability (<span class="math">\(\rho_g\)</span>). The genetic heritability examines if these to variables (e.g. height and eye-color) fall through the family tree in the same way, for example if you inherit your mothers height you are also likely to inherit her eye-color. Some traits, e.g. height and eye-color, are likely to depend on different genes, while others, e.g. height and weight, are likely to depend on many overlapping genes. Importantly, for many moderately correlated individual differences that we study as affective and social scientists, the genetic correlation could go either way &ndash; we dont often consider whether our correlations arise from similar genetic dependence.</p>
+<h2 id="computing-heritability-h2">Computing heritability (h<sup>2</sup>)<a class="headerlink" href="#computing-heritability-h2" title="Permanent link">&para;</a></h2>
+<p>First some background. In order to compute the genetic correlation you need to examine the heritability of two traits.</p>
+<p>To estimate the heritability of a single trait, you must first compute the traits covariance matrix, which we will call <span class="math">\(\Omega\)</span>, where location <span class="math">\(i,j\)</span> in the matrix is filled with the covariance in X between subject <span class="math">\(i\)</span> and subject <span class="math">\(j\)</span></p>
+<blockquote>
+<p>
+<div class="math">$$ \Omega_X = Cov[X,X] = \begin{bmatrix} cov(X_1,X_1) &amp; cov(X_1,X_2) &amp; \cdots &amp; cov(X_1,X_n) \\\ cov(X_2,X_1) &amp; cov(X_2,X_2) &amp; ... &amp; cov(X_2,X_n) \\\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\\ cov(X_1,X_n) &amp; cov(X_2,X_n) &amp; \cdots &amp; cov(X_n,X_n)  \end{bmatrix} $$</div>
+Where covariance is defined as:
+<div class="math">$$ cov[X_i, X_j] = E[(X_i - E[X_i]) (X_j - E[X_j])] $$</div>
+Where, at least in this case, the expectation can be defined as:
+<div class="math">$$ E[X] = \mu(X) = \frac{1}{N} \sum_{i=1:N} X_i $$</div>
+</p>
+</blockquote>
+<p>Similarly, you can compute a similar <em>kinship matrix</em> (<span class="math">\(\Phi\)</span>) where location <span class="math">\(i,j\)</span> represents i-js relationship (<span class="math">\(r_{ij}\)</span>) as the probability that any given gene is identical by decent (IBD).</p>
+<blockquote>
+<p><span class="math">\(\Phi\)</span> can be computed based on the pedigree, as:
+<div class="math">$$ \Phi = \frac{1}{2}R $$</div>
+where R is the matrix of each pair of animals relationship to each other, with the <span class="math">\(r\)</span> for a parent and a child <span class="math">\(.5 = (2^{-1})\)</span>, <span class="math">\(r\)</span> for siblings <span class="math">\(.5 = (2^{-2}+2^{-2})\)</span>, and so on according to the table below, and beyond.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">r</th>
+<th>relationship</th>
+<th>degree of relationship</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">100%</td>
+<td>identical twins; clones</td>
+<td>0</td>
+</tr>
+<tr>
+<td align="center">50%</td>
+<td>parent-offspring</td>
+<td>1</td>
+</tr>
+<tr>
+<td align="center">50%</td>
+<td>full siblings</td>
+<td>2</td>
+</tr>
+<tr>
+<td align="center">37.5%</td>
+<td>3/4 siblings or sibling cousins</td>
+<td>2</td>
+</tr>
+<tr>
+<td align="center">25%</td>
+<td>grandparent-grandchild</td>
+<td>2</td>
+</tr>
+<tr>
+<td align="center">25%</td>
+<td>half siblings</td>
+<td>2</td>
+</tr>
+<tr>
+<td align="center">25%</td>
+<td>aunt/uncle-nephew/niece</td>
+<td>3</td>
+</tr>
+<tr>
+<td align="center">25%</td>
+<td>double first cousins</td>
+<td>4</td>
+</tr>
+<tr>
+<td align="center">12.5%</td>
+<td>great grandparent-great grandchild</td>
+<td>3</td>
+</tr>
+<tr>
+<td align="center">12.5%</td>
+<td>first cousins</td>
+<td>4</td>
+</tr>
+<tr>
+<td align="center">12.5%</td>
+<td>quadruple second cousins</td>
+<td>6</td>
+</tr>
+<tr>
+<td align="center">9.38%</td>
+<td>triple second cousins</td>
+<td>6</td>
+</tr>
+<tr>
+<td align="center">6.25%</td>
+<td>half-first cousins</td>
+<td>4</td>
+</tr>
+<tr>
+<td align="center">6.25%</td>
+<td>first cousins once removed</td>
+<td>5</td>
+</tr>
+<tr>
+<td align="center">6.25%</td>
+<td>double second cousins</td>
+<td>6</td>
+</tr>
+<tr>
+<td align="center">3.13%</td>
+<td>second cousins</td>
+<td>6</td>
+</tr>
+<tr>
+<td align="center">0.78%</td>
+<td>third cousins</td>
+<td>8</td>
+</tr>
+<tr>
+<td align="center">0.20%</td>
+<td>fourth cousins</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p>Once you have these two matrices, you can estimate the putatively genetic and environmental variance of a quantitative phenotypic trait in the form:</p>
+<blockquote>
+<p>
+<div class="math">$$ \Omega \;\approxeq\; 2\Phi \sigma^2_g + Ι_n \sigma^2_e $$</div>
+</p>
+</blockquote>
+<p>Where</p>
+<blockquote>
+<p><span class="math">\(\Omega\)</span> is the covariance matrix of the phenotype</p>
+<p><span class="math">\(\Phi\)</span> is the n x n kinship matrix for the pedigree</p>
+<p><span class="math">\(\sigma^2_g\)</span> is the variance in the trait due to additive genetic (<span class="math">\(g\)</span>) effects</p>
+<p><span class="math">\(I_n\)</span> is the n x n identity matrix</p>
+<p><span class="math">\(\sigma^2_e\)</span> is the variance due to unmeasured random effects, presumably environmental (<span class="math">\(e\)</span>)</p>
+</blockquote>
+<p>It is worth noting that the variance attributed to the environment in this mode, is considered to be random for each subject, and not shared between subjects.</p>
+<p>The variance parameters (<span class="math">\(\sigma\)</span>) can be estimated by maximizing the likelihood function:</p>
+<blockquote>
+<p>
+<div class="math">$$ {\cal L}( \sigma^2_g, \sigma^2_e  \;\vert\; y ) = -\frac{n}{2}\ln(2\eta) - \frac{1}{2}\ln(\Omega) - \frac{1}{2}(x-\mu_X)\Omega^{-1}(X-\mu_X) $$</div>
+<span class="math">\(\eta\)</span> is ???
+The three parts of this function are: a constant (under the assumption of normality), the genetic and environmental components, and the mean.</p>
+</blockquote>
+<p>After estimating this model, the heritability (<span class="math">\(h^2\)</span>) can be estimated based on the variance in genetic and environmental effects, by calculating:</p>
+<blockquote>
+<p>
+<div class="math">$$ h^2 = \frac{\sigma^2_g}{(\sigma^2_g + σ^2_e)} $$</div>
+</p>
+</blockquote>
+<p>Computing the probability of this heritability and is computed by comparing the log likelihood of the model above and the difference between this model and another where <span class="math">\(\sigma^2_g\)</span> is constrained to equal 0.</p>
+<div class="math">$$ \chi^2_1[\sigma^2_g] = -2{\cal L}_{\sigma^2_g=0} + 2{\cal L} $$</div>
+<h2 id="computing-bivariate-heritability-genetic-correlations">Computing bivariate heritability &amp; genetic correlations<a class="headerlink" href="#computing-bivariate-heritability-genetic-correlations" title="Permanent link">&para;</a></h2>
+<p>Now that we know how to estimate heritability, we can move on to estimate bivariate heritability.</p>
+<p>We can do this by essentially concatenating traits X and Y, along with their interactions.  More specifically,</p>
+<blockquote>
+<p>
+<div class="math">$$ \Omega_B = \begin{bmatrix} \Omega_X &amp; \Omega_{YX} \\\ \Omega_{XY} &amp; \Omega_Y \end{bmatrix} $$</div>
+Where <span class="math">\(\Omega_X\)</span> and <span class="math">\(\Omega_Y\)</span> are as <span class="math">\(\Omega\)</span> above, and the bivariate portions are:
+<div class="math">$$ \Omega_{XY} \;\approxeq\; 2\Phi\sigma^2_{g_{XY}} + I_n\sigma^2_{e_{XY}} $$</div>
+with <span class="math">\(\phi\)</span> defined as before, and the variance of <span class="math">\(X,Y\)</span> can be decomposed to its component parts:</p>
+<p>
+<div class="math">$$ \sigma^2_{XY} = \sigma_X\sigma_Y\rho_{XY} $$</div>
+where <span class="math">\(\rho_{g_{XY}}\)</span> is the genetic correlation, that we have set out to estimate.</p>
+</blockquote>
+<p>This can now be estimated using the same maximum likelihood estimation we discussed above:</p>
+<blockquote>
+<p>
+<div class="math">$$ \begin{align} {\cal L}( \sigma^2_{g_{X}}, \sigma^2_{e_{X}}, \sigma^2_{g_{Y}}, \sigma^2_{e_{Y}}, \rho_{e_{XY}} \;\vert\; X, Y ) = &amp;- n \ln(2\eta) -\frac{1}{2}\ln\lvert\Omega_B\rvert \\\ &amp; -\frac{1}{2}\biggl({X \brack Y}-\mu_{X \brack Y}\biggr)\Omega^{-1}\biggl({X \brack Y}-\mu_{X \brack Y}\biggr) \end{align} $$</div>
+As before, the three parts of this function are: a distribution parameter (now for bivariate normal), the genetic and environmental components (now including a mean), and the mean.</p>
+</blockquote>
+<p>Similar to the test above, the p-values for <span class="math">\(\rho\)</span>s can be computed by estimating the same model with <span class="math">\(\rho = 0\)</span>.</p>
+<div class="math">$$ \chi^2_1[\rho_g] = -2{\cal L}_{\rho_g=0} + 2{\cal L} $$</div>
+<h2 id="asides">Asides<a class="headerlink" href="#asides" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>This technique is extensible to inclusion of covariates, which may contribute to <span class="math">\(E[X]\)</span>. Ideally, these should be non-heritable factors such as Age. Fox example, we could define <span class="math">\(E[X]\)</span> using a linear model.</p>
+<blockquote>
+<p>
+<div class="math">$$ E[X] = c\beta_0 + W_X\beta_X $$</div>
+where <span class="math">\(W_X\)</span> is an arbitrary design matrix similar to what we would use in standard regression analyses.</p>
+</blockquote>
+</li>
+<li>
+<p>It is important to consider that you can find high <span class="math">\(\rho\)</span> values in traits with extremely low <span class="math">\(h^2\)</span> values. Therefore, it can be informative to estimate the total phenotypic <span class="math">\(\rho\)</span> by modulating <span class="math">\(rho_g\)</span> and <span class="math">\(rho_e\)</span> by the <span class="math">\(h^2\)</span> estimates. This can give you an idea of how much variance in your triats is <em>really</em> explained by the genetic correlation.</p>
+<blockquote>
+<p>
+<div class="math">$$ \rho = \sqrt{h^2_X}*\sqrt{h^2_Y}*\rho_g + \sqrt{1-h^2_X} * \sqrt{1-h^2_Y} * \rho_e $$</div>
+</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="references">References:<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<p>Almasy L, Dyer TD, and Blangero J (1997). <a href="http://www.ncbi.nlm.nih.gov/pubmed/9433606">Bivariate Quantitative Trait Linkage Analysis: Pleiotropy Versus Co-incident Linkages. </a> <em>Genetic Epidemiology 14:953-958</em></p>
+<p>Almasy L, Blangero J (1998). <a href="http://www.ncbi.nlm.nih.gov/pubmed/9545414">Multipoint quantitative-trait linkage analysis in general pedigrees.</a> <em>Am J Hum Genet. 62(5):1198-211</em></p>
+<p>Williams JT, Van Eerdewegh P, Almasy L, Blangero J (1999). <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1288247/">Joint multipoint linkage analysis of multivariate qualitative and quantitative traits. I. Likelihood formulation and simulation results.</a> <em>American journal of human genetics 65(4):1134</em></p>
+<p>To learn more, check out work by <a href="http://scholar.google.com/citations?user=b4zuw-IAAAAJ&amp;h">John Blangero</a> and his team.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        <hr class="divider-short"/>
+        <!-- Disqus goes here -->
+        <!-- <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">Disqus goes here</div>
+        </section>
+        -->
+      </div>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    <footer id="footer" class="her-row">
+      <div class="container">
+
+<div class="row">
+  <div class="col-sm span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+
+           <li>
+             <a href="carly-m-drzewiecki.html">Carly M. Drzewiecki</a>
+           </li>
+           <li>
+             <a href="poirier-et-al-neuroimage-2021.html">Poirier et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="shackman-fox-ajp-2020.html">Shackman & Fox, AJP - 2020</a>
+           </li>
+           <li>
+             <a href="fox-et-al-neuroimage-2021.html">Fox et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="daniel-koh.html">Daniel Koh</a>
+           </li>
+    </ul>
+    <h2><a href="/archives">archives</a></h2>
+  </div>
+  <div class="col-sm span4">
+<h2>twitter</h2>
+
+<a class="twitter-timeline" data-dnt="true" data-height="300" href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw">Tweets by foxdotdrew</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<a href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-dnt="true" data-show-count="false">Follow @foxdotdrew</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </div>
+  <div class="col-sm span2">
+<div class="col-sm span2">
+  <h2>categories</h2>
+  <div class="meta" style="margin-bottom: 30px;">
+ 
+              <a href="/category/cv.html" class="category">cv (1)</a>
+ 
+              <a href="/category/news.html" class="category">news (3)</a>
+              <a href="/category/people.html" class="category">people (6)</a>
+ 
+              <a href="/category/posters.html" class="category">posters (48)</a>
+ 
+              <a href="/category/publications.html" class="category">publications (80)</a>
+ 
+              <a href="/category/thoughts.html" class="category">thoughts (6)</a>
+ 
+              <a href="/category/tutorials.html" class="category">tutorials (7)</a>
+  </div>
+
+
+  <p style="text-align: center;">
+  <a href="https://ds.lib.ucdavis.edu" rel="tooltip" title="DataLab UC Davis"><img title="DataLab UC Davis" alt="DataLab icon" width=100 height=100 src="https://asfox.github.io/images/datalab_centered-logo-full-color-rgb.png"></a>
+  </p>
+
+
+  <div class="social-icon-list">
+    <a title="Twitter" href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+    <a title="GitHub" href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+    <a title="E-Mail" href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+  </div>
+</div>
+
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/"><h4>Home</h4></a>
+          </div>
+
+          <div class="col-md-2">
+            <div class="social-icon-list">
+              <a href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+
+              <a href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+
+
+              <a href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+            </div>
+          </div>
+          <div class="pull-right">
+            <h4>Powered by <a href="http://blog.getpelican.com/">Pelican</a>. Originally designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a> and adapted by Drew Fox.</h4>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

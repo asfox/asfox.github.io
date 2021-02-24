@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Running ANTS on Condor</title>
+  <meta name="author" content="Drew Fox">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="Running ANTS on Condor written March 19, 2013">
+
+  <link rel="canonical" href="/running-ants-on-condor.html">
+
+
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+  <link href="/theme/css/bootstrap.min.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/screen.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/theme/css/tomorrow.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+
+
+  <script>window.jQuery || document.write('<script src="/theme/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+  <script src="/theme/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+  <!-- <script src="/theme/javascripts/jquery.tweet.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/jquery.instagram.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+  <script src="/theme/javascripts/custom.js" type="text/javascript"></script>
+  -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  
+</head>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/theme/images/home.png"/>
+    </a>
+
+    <div class='my_backdrop'>
+
+<article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2 my_junk">
+        <h1>Running ANTS on Condor</h1>
+        <div class="meta">
+          written <time datetime="2013-03-19T09:58:00-07:00">March 19, 2013</time>
+        </div>
+        <br>
+            <p>If you have ever used <a href="http://www.picsl.upenn.edu/ANTS/">ANTS</a> you know it is amazing for image registration. Unfortunately, it can take hours or even days to complete. That is where <a href="http://research.cs.wisc.edu/htcondor/">Condor</a> comes in. Here is how I created a study specific template with ANTS and Condor. <!--more--></p>
+<p>This walkthrough assumes that you know or are familiar with *unix, ANTS and Condor. High-throughput Condor is a specialized workload management system for compute-intensive jobs, and I will assume that you already have it running on your favorite computing cluster. Using the scripts below, you should be able to create a study-specific MRI template using ANTS on your Condor system.</p>
+<p>Ok, here we go. To summarize, I wrote a bash script that created a DAG file, which describes how to submit jobs to condor, which, in turn, execute bash scripts that run ANTS.</p>
+<h2 id="here-are-the-files-you-will-need">Here are the files you will need.<a class="headerlink" href="#here-are-the-files-you-will-need" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A set of programs to run and files to run them on. In my case this will be the ANTS executables, bash scripts to link executables together, and <a href="http://nifti.nimh.nih.gov/nifti-1">nifti-format</a> T1 images.</li>
+<li>To run it in Condor, you will need a submit file for each command you want to run.</li>
+<li>Condor jobs can then be linked using a directed-acyclic graph, or DAG, file. Because DAG files can be complicated and study specific, I write scripts that create these files.</li>
+</ul>
+<p>Once you have these parts, you will be able to run a script, and submit the DAG it creates to your condor system.</p>
+<div class="highlight"><pre><span></span><code>createAntsDag_nifti.sh template.nii templateMask.nii subject*.nii &gt; myDag.dag
+condor_submit_dag myDag.dag
+</code></pre></div>
+
+
+<h2 id="programs-and-files">Programs and Files<a class="headerlink" href="#programs-and-files" title="Permanent link">&para;</a></h2>
+<p>First, set up a directory with executables in it. The executables you will need are all part of the <a href="http://www.picsl.upenn.edu/ANTS/">ANTS package</a>. For this code to work, you will need <code>ANTS, ImageMath, N3BiasFieldCorrection, SetOrigin, WarpImageMultiTransform, AverageImages, AverageAffineTransform, and MultiplyImages.</code></p>
+<h2 id="prepare-to-run-ants-on-a-single-subject-using-condor">Prepare to run ANTS on a single subject using Condor.<a class="headerlink" href="#prepare-to-run-ants-on-a-single-subject-using-condor" title="Permanent link">&para;</a></h2>
+<p>In order to run ANTS repeatedly on a number of subjects, we will have to run it multiple times on a single subject.
+Once you are done, you should be able to run it like this</p>
+<div class="highlight"><pre><span></span><code>go_ants_nifti.sh templateFile.nii inputFile.nii outputFile.nii maskFile.nii
+</code></pre></div>
+
+
+<p>This script will intensity normalize, bias correct, and zero the origin of both test and template images, then run image registration from test to template.</p>
+<figure class='code'>
+<figcaption><span class="liquid-tags-code-title">Bash script to run ANTS on one brain. codec:utf8</span><span class="liquid-tags-code-filename">go_ants_nifti.sh</span><a href='/downloads/code/condor_ants/go_ants_nifti.sh'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="c1"># Organize my executables.</span>
+mkdir ants
+mv ./ImageMath ants/
+mv ./N3BiasFieldCorrection ants/
+mv ./SetOrigin ants/
+mv ./ANTS ants/
+mv ./WarpImageMultiTransform ants/
+
+<span class="c1"># Make sure my executables can be executed.</span>
+chmod -R <span class="nv">a</span><span class="o">=</span>wrx ants
+
+<span class="c1"># Setup the environment</span>
+<span class="nb">export</span> <span class="nv">HOME</span><span class="o">=</span>/home/<span class="sb">`</span>whoami<span class="sb">`</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PWD</span>/ants:<span class="nv">$PATH</span>
+
+<span class="c1"># Rename my inputs.</span>
+mv <span class="nv">$4</span> templateMask.nii
+
+<span class="c1"># Normalize the range of the two nifti files.</span>
+ImageMath <span class="m">3</span> ./ants/templateImage.nii Normalize <span class="nv">$1</span>
+ImageMath <span class="m">3</span> ./ants/testImage.nii Normalize <span class="nv">$2</span>
+
+<span class="c1"># Bias correct the images.</span>
+N3BiasFieldCorrection  <span class="m">3</span> ./ants/templateImage.nii ./ants/templateImage_repaired.nii <span class="m">4</span>
+N3BiasFieldCorrection  <span class="m">3</span> ./ants/testImage.nii ./ants/testImage_repaired.nii <span class="m">4</span>
+
+<span class="c1"># Ensure the origin is zero in all images.</span>
+SetOrigin <span class="m">3</span> ./ants/templateImage_repaired.nii ./ants/templateImage_repaired.nii <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+SetOrigin <span class="m">3</span> ./ants/testImage_repaired.nii  ./ants/testImage_repaired.nii <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+
+<span class="c1"># Run ANTS!</span>
+ANTS <span class="m">3</span> -m CC<span class="o">[</span>./ants/templateImage_repaired.nii,./ants/testImage_repaired.nii, <span class="m">1</span>,2,-0.95<span class="o">]</span> -t SyN<span class="o">[</span>.10<span class="o">]</span> -r Gauss<span class="o">[</span><span class="m">2</span>,1<span class="o">]</span> -o <span class="nv">$3</span> -i 100x75x75x50 --use-Histogram-Matching --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000
+<span class="c1"># If you want to perform your registration using a weighted mask in tempalte space, you can add &#39;-x templateMask.nii&#39; to the end of the previous line.</span>
+
+<span class="c1"># Create testImage in template space.</span>
+WarpImageMultiTransform <span class="m">3</span> ./ants/testImage_repaired.nii <span class="nv">$3</span> -R <span class="nv">$1</span> <span class="si">${</span><span class="nv">3</span><span class="p">/</span><span class="se">\.</span><span class="nv">nii</span><span class="p">/</span><span class="si">}</span>Warp.nii <span class="si">${</span><span class="nv">3</span><span class="p">/</span><span class="se">\.</span><span class="nv">nii</span><span class="p">/</span><span class="si">}</span>Affine.txt
+</code></pre></div>
+
+
+</figure>
+
+<p>Once you have the script, you can create a submit file for your script. Each submit file describes an executable that can be run on a number of different input files. In this case, the submit file will describe how to run the script that we just looked at, <code>go_ants_nifti.sh</code>. This core components of a submit file are the <code>executable</code>, <code>transfer_input_files</code>, <code>transfer_output_files</code> and <code>Arguments</code> lines. These lines specify what files you will need to upload, what command to run, and what files to transfer back to your computer upon completion.</p>
+<p>In addition to these basic processes, this submit file has a few lines that will help you out&hellip;</p>
+<ul>
+<li>document your success and failure (i.e. <code>Log</code>, <code>Output</code> and <code>Error</code> files).</li>
+<li>help your script run on the right computers (i.e. <code>Requirements</code>, <code>request_cpus</code>, <code>request_memory</code> <code>request_disk</code>).</li>
+<li>and, manage your job a bit by restarting it if it takes too long or gets booted from the compute-node unexpectedly (i.e. <code>periodic_hold</code>, <code>periodic_release</code>).</li>
+</ul>
+<figure class='code'>
+<figcaption><span class="liquid-tags-code-title">Submit File to run go_ants_nifti.sh codec:utf8</span><span class="liquid-tags-code-filename">go_ants_nifti.submit</span><a href='/downloads/code/condor_ants/go_ants_nifti.submit'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><code><span class="c1"># program to run</span>
+<span class="nv">Executable</span> <span class="o">=</span> go_ants_nifti.sh
+
+<span class="c1"># save log, output and error files</span>
+<span class="nv">Log</span> <span class="o">=</span> <span class="k">$(</span>outputFile<span class="k">)</span>_go_ants.log
+<span class="nv">Error</span> <span class="o">=</span> <span class="k">$(</span>outputFile<span class="k">)</span>_go_ants.error
+<span class="nv">Output</span> <span class="o">=</span> <span class="k">$(</span>outputFile<span class="k">)</span>_go_ants.output
+
+<span class="c1"># housekeping</span>
+<span class="nv">Universe</span> <span class="o">=</span> vanilla
+<span class="nv">notification</span> <span class="o">=</span> never
+<span class="nv">should_transfer_files</span> <span class="o">=</span> yes
+<span class="nv">when_to_transfer_output</span> <span class="o">=</span> ON_EXIT
+
+<span class="c1"># Put the job on hold if it is taking longer than 5 hours...</span>
+<span class="nv">periodic_hold</span> <span class="o">=</span> <span class="o">(</span><span class="nv">JobStatus</span> <span class="o">==</span> <span class="m">2</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">((</span>CurrentTime - EnteredCurrentStatus<span class="o">)</span> &gt; <span class="o">(</span><span class="m">60</span> * <span class="m">60</span> * <span class="m">5</span><span class="o">))</span>
+
+<span class="c1"># release any job that had an issue and got set to hold after 30 seconds, and run it on a different computer</span>
+<span class="nv">periodic_release</span> <span class="o">=</span> <span class="o">(</span><span class="nv">JobStatus</span> <span class="o">==</span> <span class="m">5</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">((</span>CurrentTime - EnteredCurrentStatus<span class="o">)</span> &gt; <span class="m">30</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span>NumSystemHolds &lt; <span class="m">10</span><span class="o">)</span>
+<span class="nv">match_list_length</span> <span class="o">=</span> <span class="m">5</span>
+<span class="nv">requirements</span> <span class="o">=</span> <span class="o">(</span>TARGET.Name <span class="o">=</span>!<span class="o">=</span> LastMatchName1<span class="o">)</span>
+
+<span class="c1"># set some minimal requirements</span>
+<span class="nv">Requirements</span>  <span class="o">=</span> <span class="o">(</span> <span class="nv">OpSys</span> <span class="o">==</span> <span class="s2">&quot;LINUX&quot;</span> <span class="o">&amp;&amp;</span> <span class="nv">Arch</span> <span class="o">==</span><span class="s2">&quot;X86_64&quot;</span> <span class="o">)</span>    
+<span class="nv">request_cpus</span> <span class="o">=</span> <span class="m">1</span>
+<span class="nv">request_memory</span> <span class="o">=</span> <span class="m">2000</span>
+<span class="nv">request_disk</span> <span class="o">=</span> <span class="m">1000000</span>
+
+<span class="c1"># files to transfer to the execute node</span>
+<span class="nv">transfer_input_files</span> <span class="o">=</span> ANTS,ImageMath,N3BiasFieldCorrection,SetOrigin,WarpImageMultiTransform,<span class="k">$(</span>templateFile<span class="k">)</span>,<span class="k">$(</span>inputFile<span class="k">)</span>,<span class="k">$(</span>maskFile<span class="k">)</span>
+
+<span class="c1"># files to transfer back when you are done</span>
+<span class="nv">transfer_output_files</span> <span class="o">=</span> <span class="k">$(</span>outputAffine<span class="k">)</span>, <span class="k">$(</span>outputWarp<span class="k">)</span>, <span class="k">$(</span>outputFile<span class="k">)</span>
+
+<span class="c1"># command arguments to run... </span>
+<span class="nv">Arguments</span> <span class="o">=</span> <span class="k">$(</span>templateFile<span class="k">)</span> <span class="k">$(</span>inputFile<span class="k">)</span> <span class="k">$(</span>outputFile<span class="k">)</span> <span class="k">$(</span>maskFile<span class="k">)</span>
+
+Queue
+</code></pre></div>
+
+
+</figure>
+
+<p>Assuming you setup your files appropriately, you could, at least in theory, run</p>
+<div class="highlight"><pre><span></span><code>condor_submit go_ants_nifti.submit
+</code></pre></div>
+
+
+<h2 id="create-a-study-specific-template-using-condor">Create a study-specific template using Condor.<a class="headerlink" href="#create-a-study-specific-template-using-condor" title="Permanent link">&para;</a></h2>
+<p>Once you have ANTS running, the next step will be to create your study-specific template. This step, will create a mean image of all subjects in template space and transform it based on the average transformation it took subjects to get to template space. We will use the same strategy we used above, namely write a script and a submit file that will manage that script.</p>
+<div class="highlight"><pre><span></span><code>go_shapeUpdateTemplate.sh templateFile.nii templateSpacePrefix templateMask.nii newTemplateMask.nii
+</code></pre></div>
+
+
+<figure class='code'>
+<figcaption><span class="liquid-tags-code-title">Bash script to create a study specific template. codec:utf8</span><span class="liquid-tags-code-filename">go_shapeUpdateTemplate.sh</span><a href='/downloads/code/condor_ants/go_shapeUpdateTemplate.sh'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="c1"># Organize my executables.</span>
+mkdir ants
+mv ./AverageImages ants/
+mv ./SetOrigin ants/
+mv ./MultiplyImages ants/
+mv ./AverageAffineTransform ants/
+mv ./WarpImageMultiTransform ants/
+
+<span class="c1"># Make sure my executables can be executed.</span>
+chmod -R <span class="nv">a</span><span class="o">=</span>wrx ants
+
+<span class="c1"># Setup the environment</span>
+<span class="nb">export</span> <span class="nv">HOME</span><span class="o">=</span>/home/<span class="sb">`</span>whoami<span class="sb">`</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PWD</span>/ants:<span class="nv">$PATH</span>
+
+<span class="c1"># Rename commandline arguments.</span>
+<span class="nv">template</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">outputname</span><span class="o">=</span><span class="nv">$2</span>
+<span class="nv">oldMask</span><span class="o">=</span><span class="nv">$3</span>
+<span class="nv">newMask</span><span class="o">=</span><span class="nv">$4</span>
+<span class="nv">templateRoot</span><span class="o">=</span><span class="si">${</span><span class="nv">template</span><span class="p">//</span><span class="se">\.</span><span class="nv">nii</span><span class="p">/</span><span class="si">}</span>
+
+<span class="c1"># set gradient-step constant.</span>
+<span class="nv">gradientstep</span><span class="o">=</span>-.15
+
+<span class="c1"># move existing transforms into a warps directory.</span>
+mkdir warps
+mv *Warp.nii warps/
+mv *Affine.txt warps/
+
+<span class="c1"># Create mean aligned image.</span>
+AverageImages <span class="m">3</span> <span class="si">${</span><span class="nv">template</span><span class="si">}</span> <span class="m">1</span> <span class="si">${</span><span class="nv">outputname</span><span class="si">}</span>*.nii
+
+<span class="c1"># Create mean warp to template space.</span>
+AverageImages <span class="m">3</span> <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="m">0</span> warps/<span class="si">${</span><span class="nv">outputname</span><span class="si">}</span>*Warp.nii
+
+<span class="c1"># Multiply warp by gradient-step constant.</span>
+MultiplyImages <span class="m">3</span> <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="si">${</span><span class="nv">gradientstep</span><span class="si">}</span> <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii
+
+<span class="c1"># delete template affine.</span>
+rm -f <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>Affine.txt
+
+<span class="c1"># Create mean Affine Transform</span>
+AverageAffineTransform <span class="m">3</span> <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>Affine.txt warps/<span class="si">${</span><span class="nv">outputname</span><span class="si">}</span>*Affine.txt
+
+<span class="c1"># Move template based on the inverse of the mean warp files.</span>
+WarpImageMultiTransform <span class="m">3</span> <span class="si">${</span><span class="nv">template</span><span class="si">}</span> <span class="si">${</span><span class="nv">template</span><span class="si">}</span> <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii -R <span class="si">${</span><span class="nv">template</span><span class="si">}</span>
+
+<span class="c1"># Move template mask based on the inverse of the mean warp.</span>
+SetOrigin <span class="m">3</span> <span class="si">${</span><span class="nv">oldMask</span><span class="si">}</span> <span class="si">${</span><span class="nv">oldMask</span><span class="si">}</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+WarpImageMultiTransform <span class="m">3</span> <span class="si">${</span><span class="nv">oldMask</span><span class="si">}</span> <span class="si">${</span><span class="nv">newMask</span><span class="si">}</span> <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii <span class="si">${</span><span class="nv">templateRoot</span><span class="si">}</span>warp.nii -R <span class="si">${</span><span class="nv">template</span><span class="si">}</span>
+
+<span class="c1"># Cleanup.</span>
+rm -rf ants/ 
+rm -rf warps/
+rm -rf <span class="si">${</span><span class="nv">outputname</span><span class="si">}</span>*.nii
+</code></pre></div>
+
+
+</figure>
+
+<p>Then you create the Submit file that manages this bash script. This submit file will tell condor how to run and manage the above <code>go_shapeUpdateTemplate.sh</code>.  If you are so inclined, you can update this submit file with some of the <code>requirements</code>, <code>requests</code> or <code>periodic_</code> commands above. (I didnt because I dont have a really good idea how much memory/disk this process takes, and dont want to preemptively put it on hold.</p>
+<figure class='code'>
+<figcaption><span class="liquid-tags-code-title">Submit file to run go_shapeUpdateTemplate.sh codec:utf8</span><span class="liquid-tags-code-filename">go_shapeUpdateTemplate.submit</span><a href='/downloads/code/condor_ants/go_shapeUpdateTemplate.submit'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><code><span class="nv">Executable</span> <span class="o">=</span> go_shapeUpdateTemplate.sh
+
+<span class="nv">Log</span> <span class="o">=</span> go_shapeUpdateTemplate.log
+<span class="nv">Error</span> <span class="o">=</span> go_shapeUpdateTemplate.error
+<span class="nv">Output</span> <span class="o">=</span> go_shapeUpdateTemplate.output
+
+<span class="nv">Universe</span> <span class="o">=</span> vanilla
+<span class="nv">notification</span> <span class="o">=</span> never
+<span class="nv">should_transfer_files</span> <span class="o">=</span> yes
+<span class="nv">when_to_transfer_output</span> <span class="o">=</span> ON_EXIT
+
+<span class="nv">Requirements</span>  <span class="o">=</span> <span class="o">(</span> <span class="nv">OpSys</span> <span class="o">==</span> <span class="s2">&quot;LINUX&quot;</span> <span class="o">&amp;&amp;</span> <span class="nv">Arch</span> <span class="o">==</span><span class="s2">&quot;X86_64&quot;</span> <span class="o">)</span>    
+
+<span class="nv">transfer_input_files</span> <span class="o">=</span> SetOrigin,AverageImages,MultiplyImages,AverageAffineTransform,WarpImageMultiTransform,<span class="k">$(</span>oldMask<span class="k">)</span>,<span class="k">$(</span>RegisteredFiles<span class="k">)</span>,<span class="k">$(</span>AffineFiles<span class="k">)</span>,<span class="k">$(</span>WarpFiles<span class="k">)</span>
+
+<span class="nv">transfer_output_files</span> <span class="o">=</span> <span class="k">$(</span>templateFile<span class="k">)</span>,<span class="k">$(</span>newMask<span class="k">)</span>
+
+<span class="nv">Arguments</span> <span class="o">=</span> <span class="k">$(</span>templateFile<span class="k">)</span> toTemplate_ <span class="k">$(</span>oldMask<span class="k">)</span> <span class="k">$(</span>newMask<span class="k">)</span> 
+
+Queue
+</code></pre></div>
+
+
+</figure>
+
+<h2 id="create-your-dag-parallel-and-dependent-processes">Create your DAG parallel and dependent processes.<a class="headerlink" href="#create-your-dag-parallel-and-dependent-processes" title="Permanent link">&para;</a></h2>
+<p>Now you have two scripts and two submit files for those scripts. The DAG you create will allow you run these commands in the right order on the right subjects. The format of the DAG file is pretty simple. For every job you run, you need to define what submit files to use, define any variables you want to pass to the submit file, and any dependencies it has.</p>
+<div class="highlight"><pre><span></span><code>PARENT previousTemplateCreation CHILD myANTS
+JOB myANTS  go_ants_nifti.submit
+VARS myANTS <span class="nv">templateFile</span><span class="o">=</span>templateFile.nii <span class="nv">inputFile</span><span class="o">=</span>myInputFile.nii <span class="nv">maskFile</span><span class="o">=</span>myMaskFile.nii <span class="nv">outputAffine</span><span class="o">=</span>myOutputAffine.txt <span class="nv">outputWarp</span><span class="o">=</span>myOutputWarp.nii  <span class="nv">outputFile</span><span class="o">=</span>myOutput.nii
+PARENT myANTS CHILD nextTemplateCreation
+</code></pre></div>
+
+
+<p>This code will run the job <code>myANTS</code>. It defines <code>myANTS</code> as a single instance of <code>go_ants_nifti.sh</code> using the <code>go_ants_nifti.submit</code> submit file, with the specified <code>VARS</code>, which could dictate what subject to run. Importantly, this script will not run <code>myANTS</code> until another job <code>previousTemplateCreation</code> has finished, and will wait to start <code>nextTemplateCreation</code> until <code>myANTS</code> has finished.</p>
+<p>Because this can get crazy complicated when you have many subjects and repeated template creation iterations, I wrote a bash script that will create a bunch of these commands.</p>
+<figure class='code'>
+<figcaption><span class="liquid-tags-code-title">Create a Condor DAG file codec:utf8</span><span class="liquid-tags-code-filename">createAntsDag_nifti.sh</span><a href='/downloads/code/condor_ants/createAntsDag_nifti.sh'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># USAGE: createAntsDag_nifti.sh template.nii templateMask.nii subject*.nii &gt; ants_condor.dag</span>
+
+<span class="nv">NUM_ITERATIONS</span><span class="o">=</span><span class="m">4</span><span class="p">;</span>
+<span class="nv">TemplateFile</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">TemplateImageMask</span><span class="o">=</span><span class="nv">$2</span>
+
+<span class="nb">shift</span> <span class="m">2</span>
+<span class="nv">MyImages</span><span class="o">=</span><span class="sb">`</span>ls <span class="nv">$*</span><span class="sb">`</span>
+
+<span class="nv">TemplateImage</span><span class="o">=</span><span class="nv">$TemplateFile</span>
+<span class="nv">TemplateRoot</span><span class="o">=</span><span class="si">${</span><span class="nv">TemplateFile</span><span class="p">//</span><span class="se">\.</span><span class="nv">nii</span><span class="p">/</span><span class="si">}</span><span class="p">;</span>
+
+<span class="nv">iterationCount</span><span class="o">=</span><span class="m">1</span><span class="p">;</span>
+<span class="k">while</span> <span class="o">[</span> <span class="nv">$iterationCount</span> -le <span class="nv">$NUM_ITERATIONS</span> <span class="o">]</span>
+<span class="k">do</span>
+    <span class="nv">ouputFileList</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    
+    <span class="nv">imageCount</span><span class="o">=</span><span class="m">0</span><span class="p">;</span>
+    <span class="k">for</span> Image in <span class="nv">$MyImages</span>
+    <span class="k">do</span>
+
+        <span class="nv">ImageRoot</span><span class="o">=</span><span class="si">${</span><span class="nv">Image</span><span class="p">//</span><span class="se">\.</span><span class="nv">nii</span><span class="p">/</span><span class="si">}</span><span class="p">;</span>
+        <span class="nv">ImageFile</span><span class="o">=</span><span class="nv">$ImageRoot</span>.nii
+    
+        <span class="nv">JobName</span><span class="o">=</span><span class="s2">&quot;toTemplate_&quot;</span><span class="nv">$TemplateRoot</span><span class="s2">&quot;_&quot;</span><span class="nv">$iterationCount</span><span class="s2">&quot;Pass_&quot;</span><span class="nv">$ImageRoot</span>
+
+        <span class="nv">outputFile</span><span class="o">=</span>toTemplate_<span class="nv">$ImageRoot</span>.nii
+        <span class="nv">affineFile</span><span class="o">=</span><span class="s2">&quot;toTemplate_&quot;</span><span class="nv">$ImageRoot</span><span class="s2">&quot;Affine.txt&quot;</span>
+        <span class="nv">warpFile</span><span class="o">=</span><span class="s2">&quot;toTemplate_&quot;</span><span class="nv">$ImageRoot</span><span class="s2">&quot;Warp.nii&quot;</span>
+    
+        <span class="nb">echo</span> <span class="s2">&quot;Job </span><span class="nv">$JobName</span><span class="s2"> go_ants_nifti.submit&quot;</span>
+        <span class="nb">echo</span> <span class="s2">&quot;VARS </span><span class="nv">$JobName</span><span class="s2"> templateFile=\&quot;</span><span class="nv">$TemplateImage</span><span class="s2">\&quot; inputFile=\&quot;</span><span class="nv">$ImageFile</span><span class="s2">\&quot; outputFile=\&quot;</span><span class="nv">$outputFile</span><span class="s2">\&quot; outputAffine=\&quot;</span><span class="nv">$affineFile</span><span class="s2">\&quot; outputWarp=\&quot;</span><span class="nv">$warpFile</span><span class="s2">\&quot; maskFile=\&quot;</span><span class="nv">$TemplateImageMask</span><span class="s2">\&quot; &quot;</span>
+
+        outputFileList<span class="o">[</span><span class="nv">$imageCount</span><span class="o">]=</span><span class="nv">$outputFile</span>
+        outputAffineList<span class="o">[</span><span class="nv">$imageCount</span><span class="o">]=</span><span class="nv">$affineFile</span>
+        outputWarpList<span class="o">[</span><span class="nv">$imageCount</span><span class="o">]=</span><span class="nv">$warpFile</span>
+        JobList<span class="o">[</span><span class="nv">$imageCount</span><span class="o">]=</span><span class="nv">$JobName</span>
+        
+        <span class="nv">imageCount</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$imageCount</span> <span class="o">+</span> <span class="m">1</span> <span class="k">))</span>
+
+    <span class="k">done</span>
+
+    <span class="nv">OldTemplateImageMask</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="nv">$TemplateImageMask</span>
+    <span class="nv">TemplateImage</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="nv">$TemplateRoot</span><span class="s2">&quot;_&quot;</span><span class="nv">$iterationCount</span><span class="s2">&quot;.nii&quot;</span><span class="p">;</span>
+    <span class="nv">TemplateImageMask</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="nv">$TemplateRoot</span><span class="s2">&quot;_&quot;</span><span class="nv">$iterationCount</span><span class="s2">&quot;_mask.nii&quot;</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$iterationCount</span> -ne <span class="m">1</span> <span class="o">]</span>
+    <span class="k">then</span>
+        <span class="nv">parentIteration</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$iterationCount</span> <span class="o">-</span> <span class="m">1</span> <span class="k">))</span>
+        <span class="nv">ParentJobName</span><span class="o">=</span><span class="s2">&quot;createTemplate_&quot;</span><span class="nv">$TemplateRoot</span><span class="s2">&quot;_&quot;</span><span class="nv">$parentIteration</span>
+        <span class="nb">echo</span> <span class="s2">&quot;PARENT </span><span class="nv">$ParentJobName</span><span class="s2"> CHILD </span><span class="si">${</span><span class="nv">JobList</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">fi</span>
+
+    <span class="nv">JobName</span><span class="o">=</span><span class="s2">&quot;createTemplate_&quot;</span><span class="nv">$TemplateRoot</span><span class="s2">&quot;_&quot;</span><span class="nv">$iterationCount</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Job </span><span class="nv">$JobName</span><span class="s2"> go_shapeUpdateTemplate.submit&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Parent </span><span class="si">${</span><span class="nv">JobList</span><span class="p">[@]</span><span class="si">}</span><span class="s2"> CHILD </span><span class="nv">$JobName</span><span class="s2">&quot;</span>
+    <span class="nv">outputFileListText</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span> <span class="s2">&quot;%s,&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">outputFileList</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="k">)</span>
+    <span class="nv">outputAffineListText</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span> <span class="s2">&quot;%s,&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">outputAffineList</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="k">)</span>
+    <span class="nv">outputWarpListText</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span> <span class="s2">&quot;%s,&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">outputWarpList</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;VARS </span><span class="nv">$JobName</span><span class="s2"> templateFile=\&quot;</span><span class="nv">$TemplateImage</span><span class="s2">\&quot; RegisteredFiles=\&quot;</span><span class="si">${</span><span class="nv">outputFileListText</span><span class="p">%?</span><span class="si">}</span><span class="s2">\&quot; AffineFiles=\&quot;</span><span class="si">${</span><span class="nv">outputAffineListText</span><span class="p">%?</span><span class="si">}</span><span class="s2">\&quot; WarpFiles=\&quot;</span><span class="si">${</span><span class="nv">outputWarpListText</span><span class="p">%?</span><span class="si">}</span><span class="s2">\&quot; oldMask=\&quot;</span><span class="nv">$OldTemplateImageMask</span><span class="s2">\&quot; newMask=\&quot;</span><span class="nv">$TemplateImageMask</span><span class="s2">\&quot; &quot;</span>
+
+    <span class="nv">iterationCount</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$iterationCount</span> <span class="o">+</span> <span class="m">1</span> <span class="k">))</span>
+
+<span class="k">done</span>
+</code></pre></div>
+
+
+</figure>
+
+<p>Feel free to run it on your data and see what dag file it creates.</p>
+<div class="highlight"><pre><span></span><code>createAntsDag_nifti.sh template.nii templateMask.nii subject*.nii &gt; myDag.dag
+more myDag.dag
+</code></pre></div>
+
+
+<h2 id="submit-your-dag">Submit your DAG.<a class="headerlink" href="#submit-your-dag" title="Permanent link">&para;</a></h2>
+<p>If you have gotten this far, you should be ready to submit your DAG file.</p>
+<div class="highlight"><pre><span></span><code>condor_submit_dag myDag.dag
+</code></pre></div>
+
+
+<p>Once you submit this file, your condor system should manage the execution of your script and give you many-many output files.  In particular it should create a file for each <code>subject*.nii</code> in standard space called <code>toTemplate_subject*.nii</code>, as well as <code>toTemplate_subject*Affine.txt</code> and <code>toTemplate_subject*Warp.nii</code> files that describe the transformation. It will also create a study-specific template, called <code>template_4.nii</code></p>
+<p>Hopefully this will help you get your ANTSing to run faster.</p>
+        <hr class="divider-short"/>
+        <!-- Disqus goes here -->
+        <!-- <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">Disqus goes here</div>
+        </section>
+        -->
+      </div>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    <footer id="footer" class="her-row">
+      <div class="container">
+
+<div class="row">
+  <div class="col-sm span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+
+           <li>
+             <a href="carly-m-drzewiecki.html">Carly M. Drzewiecki</a>
+           </li>
+           <li>
+             <a href="poirier-et-al-neuroimage-2021.html">Poirier et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="shackman-fox-ajp-2020.html">Shackman & Fox, AJP - 2020</a>
+           </li>
+           <li>
+             <a href="fox-et-al-neuroimage-2021.html">Fox et al., Neuroimage -  2021</a>
+           </li>
+           <li>
+             <a href="daniel-koh.html">Daniel Koh</a>
+           </li>
+    </ul>
+    <h2><a href="/archives">archives</a></h2>
+  </div>
+  <div class="col-sm span4">
+<h2>twitter</h2>
+
+<a class="twitter-timeline" data-dnt="true" data-height="300" href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw">Tweets by foxdotdrew</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<a href="https://twitter.com/foxdotdrew?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-dnt="true" data-show-count="false">Follow @foxdotdrew</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </div>
+  <div class="col-sm span2">
+<div class="col-sm span2">
+  <h2>categories</h2>
+  <div class="meta" style="margin-bottom: 30px;">
+ 
+              <a href="/category/cv.html" class="category">cv (1)</a>
+ 
+              <a href="/category/news.html" class="category">news (3)</a>
+              <a href="/category/people.html" class="category">people (6)</a>
+ 
+              <a href="/category/posters.html" class="category">posters (48)</a>
+ 
+              <a href="/category/publications.html" class="category">publications (80)</a>
+ 
+              <a href="/category/thoughts.html" class="category">thoughts (6)</a>
+ 
+              <a href="/category/tutorials.html" class="category">tutorials (7)</a>
+  </div>
+
+
+  <p style="text-align: center;">
+  <a href="https://ds.lib.ucdavis.edu" rel="tooltip" title="DataLab UC Davis"><img title="DataLab UC Davis" alt="DataLab icon" width=100 height=100 src="https://asfox.github.io/images/datalab_centered-logo-full-color-rgb.png"></a>
+  </p>
+
+
+  <div class="social-icon-list">
+    <a title="Twitter" href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+    <a title="GitHub" href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+    <a title="E-Mail" href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+  </div>
+</div>
+
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/"><h4>Home</h4></a>
+          </div>
+
+          <div class="col-md-2">
+            <div class="social-icon-list">
+              <a href="https://twitter.com/foxdotdrew"><img src="/theme/images/glyphicons_social_31_twitter.png"/></a>
+
+              <a href="https://github.com/asfox"><img src="/theme/images/glyphicons_social_21_github.png"/></a>
+
+
+              <a href="mailto:dfox@ucdavis.edu"><img src="/theme/images/glyphicons_social_39_e-mail.png"/></a>
+            </div>
+          </div>
+          <div class="pull-right">
+            <h4>Powered by <a href="http://blog.getpelican.com/">Pelican</a>. Originally designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a> and adapted by Drew Fox.</h4>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
