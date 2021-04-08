@@ -5,36 +5,43 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2021-03-26T15:40:54-00:00</lastmod>
+<lastmod>2021-04-08T11:37:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2021-03-26T15:40:54-00:00</lastmod>
+<lastmod>2021-04-08T11:37:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2021-03-26T15:40:54-00:00</lastmod>
+<lastmod>2021-04-08T11:37:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2021-03-26T15:40:54-00:00</lastmod>
+<lastmod>2021-04-08T11:37:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2021-03-26T15:40:54-00:00</lastmod>
+<lastmod>2021-04-08T11:37:49-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/roseboom-et-al-molecular-therapy-2021.html</loc>
+<lastmod>2021-04-08T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -1188,7 +1195,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2021-03-25T00:00:00-07:53</lastmod>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1264,6 +1271,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/ah-difilippo.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/alexander-al.html</loc>
 <lastmod>2019-06-25T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1285,6 +1299,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/and-nh-kalin.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/anderson-as.html</loc>
 <lastmod>2020-05-12T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1300,7 +1321,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/as-fox.html</loc>
-<lastmod>2021-03-25T00:00:00-07:53</lastmod>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1427,6 +1448,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/brodsky-ek.html</loc>
 <lastmod>2019-06-25T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/bt-christian.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1964,6 +1992,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/ja-oler.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/jahn-al.html</loc>
 <lastmod>2010-01-12T12:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1973,6 +2008,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/jesson-mal.html</loc>
 <lastmod>2015-01-21T12:03:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/jl-gomez.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2181,6 +2223,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/m-michaelides.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/m-ortiz-rios.html</loc>
 <lastmod>2021-03-22T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2190,6 +2239,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/m-wilke.html</loc>
 <lastmod>2021-03-22T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/ma-boehm.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2230,6 +2286,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/me-olsen.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/meguerditchian-a.html</loc>
 <lastmod>2021-03-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2246,6 +2309,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/mfs-rushworth.html</loc>
 <lastmod>2021-03-22T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/mk-riedel.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2440,6 +2510,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/ph-roseboom.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/pine-ds.html</loc>
 <lastmod>2019-02-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2582,6 +2659,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/s-sawiak.html</loc>
 <lastmod>2021-03-25T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/sal-mueller.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2841,6 +2925,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/vanderwerff-l.html</loc>
 <lastmod>2011-01-12T12:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/vr-elam.html</loc>
+<lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
