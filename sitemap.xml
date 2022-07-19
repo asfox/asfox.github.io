@@ -5,41 +5,48 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2022-07-17T21:37:41-00:00</lastmod>
+<lastmod>2022-07-19T13:24:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2022-07-17T21:37:41-00:00</lastmod>
+<lastmod>2022-07-19T13:24:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2022-07-17T21:37:41-00:00</lastmod>
+<lastmod>2022-07-19T13:24:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2022-07-17T21:37:41-00:00</lastmod>
+<lastmod>2022-07-19T13:24:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2022-07-17T21:37:41-00:00</lastmod>
+<lastmod>2022-07-19T13:24:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/jairo-chavez.html</loc>
+<lastmod>2022-09-21T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/rani-purewal.html</loc>
 <lastmod>2022-09-21T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
