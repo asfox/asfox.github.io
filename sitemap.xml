@@ -5,35 +5,35 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2022-07-27T22:14:03-00:00</lastmod>
+<lastmod>2022-09-15T13:54:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2022-07-27T22:14:03-00:00</lastmod>
+<lastmod>2022-09-15T13:54:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2022-07-27T22:14:03-00:00</lastmod>
+<lastmod>2022-09-15T13:54:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2022-07-27T22:14:03-00:00</lastmod>
+<lastmod>2022-09-15T13:54:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2022-07-27T22:14:03-00:00</lastmod>
+<lastmod>2022-09-15T13:54:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -48,6 +48,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/rani-purewal.html</loc>
 <lastmod>2022-09-21T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/holley-fox-neuroscience-biobehavioral-reviews-2022.html</loc>
+<lastmod>2022-09-15T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1272,7 +1279,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2022-05-27T00:00:00-07:53</lastmod>
+<lastmod>2022-09-15T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1839,7 +1846,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fox-as.html</loc>
-<lastmod>2022-05-27T00:00:00-07:53</lastmod>
+<lastmod>2022-09-15T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2091,7 +2098,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/holley-d.html</loc>
-<lastmod>2021-01-15T00:00:00-07:53</lastmod>
+<lastmod>2022-09-15T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
