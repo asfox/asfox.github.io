@@ -5,36 +5,43 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2022-09-15T14:22:00-00:00</lastmod>
+<lastmod>2022-10-20T10:49:06-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2022-09-15T14:22:00-00:00</lastmod>
+<lastmod>2022-10-20T10:49:06-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2022-09-15T14:22:00-00:00</lastmod>
+<lastmod>2022-10-20T10:49:06-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2022-09-15T14:22:00-00:00</lastmod>
+<lastmod>2022-10-20T10:49:06-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2022-09-15T14:22:00-00:00</lastmod>
+<lastmod>2022-10-20T10:49:06-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/kenwood-oler-et-al-oxford-open-neuroscience-2022.html</loc>
+<lastmod>2022-10-20T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -1286,7 +1293,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2022-09-15T00:00:00-07:53</lastmod>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1329,6 +1336,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/adluru-n.html</loc>
 <lastmod>2012-01-05T12:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/aggarwal-n.html</loc>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1504,6 +1518,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/brodsky-ek.html</loc>
 <lastmod>2019-06-25T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/brunner-kg.html</loc>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1853,7 +1874,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fox-as.html</loc>
-<lastmod>2022-09-15T00:00:00-07:53</lastmod>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2224,7 +2245,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/kalin-nh.html</loc>
-<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2260,6 +2281,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/kennis-m.html</loc>
 <lastmod>2015-02-04T12:03:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/kenwood-mm.html</loc>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2538,6 +2566,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/murray-ea.html</loc>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/muzny-dm.html</loc>
 <lastmod>2012-01-08T12:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2651,7 +2686,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/oler-ja.html</loc>
-<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2812,7 +2847,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/riedel-mk.html</loc>
-<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2847,7 +2882,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/roseboom-ph.html</loc>
-<lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3134,7 +3169,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/tromp-dpm.html</loc>
-<lastmod>2019-06-25T00:00:00-07:53</lastmod>
+<lastmod>2022-10-20T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
