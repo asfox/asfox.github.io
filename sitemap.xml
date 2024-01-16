@@ -5,36 +5,43 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2023-11-27T14:41:35-00:00</lastmod>
+<lastmod>2024-01-16T11:53:42-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2023-11-27T14:41:35-00:00</lastmod>
+<lastmod>2024-01-16T11:53:42-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2023-11-27T14:41:35-00:00</lastmod>
+<lastmod>2024-01-16T11:53:42-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2023-11-27T14:41:35-00:00</lastmod>
+<lastmod>2024-01-16T11:53:42-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2023-11-27T14:41:35-00:00</lastmod>
+<lastmod>2024-01-16T11:53:42-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/tromp-fox-et-al-psychoneuroendocrinology-2023.html</loc>
+<lastmod>2024-01-16T00:00:00-08:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -1335,7 +1342,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2023-10-17T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1405,7 +1412,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/alexander-al.html</loc>
-<lastmod>2019-06-25T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2007,7 +2014,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fox-as.html</loc>
-<lastmod>2023-10-17T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2413,7 +2420,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/kalin-nh.html</loc>
-<lastmod>2023-10-17T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2987,7 +2994,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/oler-ja.html</loc>
-<lastmod>2023-10-17T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3176,7 +3183,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/riedel-mk.html</loc>
-<lastmod>2023-10-17T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3211,7 +3218,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/roseboom-ph.html</loc>
-<lastmod>2023-10-17T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3561,7 +3568,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/tromp-dpm.html</loc>
-<lastmod>2023-01-20T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3749,13 +3756,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>/author/xinhong-chen-x.html</loc>
-<lastmod>2023-04-12T00:00:00-07:53</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
 <loc>/author/xu-t.html</loc>
 <lastmod>2021-03-25T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -3820,7 +3820,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/zhou-x.html</loc>
-<lastmod>2021-01-15T00:00:00-07:53</lastmod>
+<lastmod>2024-01-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
