@@ -5,36 +5,50 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2024-01-16T11:53:42-00:00</lastmod>
+<lastmod>2024-03-15T12:09:25-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2024-01-16T11:53:42-00:00</lastmod>
+<lastmod>2024-03-15T12:09:25-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2024-01-16T11:53:42-00:00</lastmod>
+<lastmod>2024-03-15T12:09:25-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2024-01-16T11:53:42-00:00</lastmod>
+<lastmod>2024-03-15T12:09:25-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2024-01-16T11:53:42-00:00</lastmod>
+<lastmod>2024-03-15T12:09:25-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/drzewiecki-fox-cognitive-affective-behavioral-neuroscience-2024.html</loc>
+<lastmod>2024-02-14T00:00:00-08:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/holley-campos-et-al-translational-psychiatry-2024.html</loc>
+<lastmod>2024-02-14T00:00:00-08:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -1342,7 +1356,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2024-01-16T00:00:00-07:53</lastmod>
+<lastmod>2024-02-14T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1629,7 +1643,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/campos-lj.html</loc>
-<lastmod>2023-04-12T00:00:00-07:53</lastmod>
+<lastmod>2024-02-14T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1643,7 +1657,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/capitanio-jp.html</loc>
-<lastmod>2022-04-27T00:00:00-07:53</lastmod>
+<lastmod>2024-02-14T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1888,7 +1902,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/drzewiecki-cm.html</loc>
-<lastmod>2022-04-27T00:00:00-07:53</lastmod>
+<lastmod>2024-02-14T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2014,7 +2028,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fox-as.html</loc>
-<lastmod>2024-01-16T00:00:00-07:53</lastmod>
+<lastmod>2024-02-14T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2294,7 +2308,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/holley-d.html</loc>
-<lastmod>2022-09-15T00:00:00-07:53</lastmod>
+<lastmod>2024-02-14T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3807,6 +3821,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/zhang-m.html</loc>
 <lastmod>2023-05-29T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/zhang-y.html</loc>
+<lastmod>2024-02-14T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
