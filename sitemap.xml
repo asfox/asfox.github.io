@@ -5,48 +5,48 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2024-09-05T15:06:26-00:00</lastmod>
+<lastmod>2024-10-30T10:19:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2024-09-05T15:06:26-00:00</lastmod>
+<lastmod>2024-10-30T10:19:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2024-09-05T15:06:26-00:00</lastmod>
+<lastmod>2024-10-30T10:19:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2024-09-05T15:06:26-00:00</lastmod>
+<lastmod>2024-10-30T10:19:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2024-09-05T15:06:26-00:00</lastmod>
+<lastmod>2024-10-30T10:19:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/grogans-et-al-nature-reviews-neuroscience-2024.html</loc>
-<lastmod>2024-06-10T00:00:00-07:00</lastmod>
+<loc>/kamboj-et-al-american-journal-of-psychiatry-2024.html</loc>
+<lastmod>2024-10-03T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/kamboj-et-al-american-journal-of-psychiatry-2024.html</loc>
+<loc>/grogans-et-al-nature-reviews-neuroscience-2024.html</loc>
 <lastmod>2024-06-10T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
@@ -1384,7 +1384,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1475,7 +1475,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/ander-bp.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1552,7 +1552,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/bauman-md.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1699,7 +1699,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/calrson-el.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2105,7 +2105,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fox-as.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2182,7 +2182,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fudge-jl.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2343,7 +2343,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/hanson-kl.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2525,7 +2525,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/kamboj-s.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2966,7 +2966,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/murray-kd.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3421,7 +3421,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/schumann-cm.html</loc>
-<lastmod>2024-06-10T00:00:00-07:53</lastmod>
+<lastmod>2024-10-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
