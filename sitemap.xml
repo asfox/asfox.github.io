@@ -5,35 +5,35 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2024-11-07T14:05:05-00:00</lastmod>
+<lastmod>2024-11-07T14:26:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2024-11-07T14:05:05-00:00</lastmod>
+<lastmod>2024-11-07T14:26:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2024-11-07T14:05:05-00:00</lastmod>
+<lastmod>2024-11-07T14:26:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2024-11-07T14:05:05-00:00</lastmod>
+<lastmod>2024-11-07T14:26:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2024-11-07T14:05:05-00:00</lastmod>
+<lastmod>2024-11-07T14:26:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -172,6 +172,55 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/chuapoco-campos-et-al-society-of-biological-psychiatry-meeting-2023.html</loc>
+<lastmod>2023-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/didier-et-al-society-of-biological-psychiatry-meeting-2023.html</loc>
+<lastmod>2023-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/drzewiecki-et-al-society-of-biological-psychiatry-meeting-2023.html</loc>
+<lastmod>2023-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/grogans-et-al-2-society-of-biological-psychiatry-meeting-2023.html</loc>
+<lastmod>2023-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/grogans-et-al-society-of-biological-psychiatry-meeting-2023.html</loc>
+<lastmod>2023-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/kamboj-et-al-society-of-biological-psychiatry-meeting-2023.html</loc>
+<lastmod>2023-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/scott-et-al-aligning-science-across-parkinsons-meeting-2023.html</loc>
+<lastmod>2023-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/campos-arokiaraj-et-al-current-research-in-neurobiology-2023.html</loc>
 <lastmod>2023-04-12T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
@@ -244,6 +293,55 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/chen-kumar-et-al-neuron-2022.html</loc>
 <lastmod>2022-05-27T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/campos-et-al-society-of-biological-psychiatry-meeting-2022.html</loc>
+<lastmod>2022-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/carlson-et-al-society-for-neuroscience-conference-2022.html</loc>
+<lastmod>2022-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/chen-et-al-society-for-neuroscience-conference-2022.html</loc>
+<lastmod>2022-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/chuapoco-et-al-society-for-neuroscience-conference-2022.html</loc>
+<lastmod>2022-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/drzewiecki-et-al-society-for-neuroscience-conference-2022.html</loc>
+<lastmod>2022-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/gorgans-et-al-society-of-biological-psychiatry-meeting-2022.html</loc>
+<lastmod>2022-05-01T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/kenwood-et-al-society-of-biological-psychiatry-meeting-2022.html</loc>
+<lastmod>2022-05-01T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1530,6 +1628,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/ander-b.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/ander-bp.html</loc>
 <lastmod>2024-11-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1551,6 +1656,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/andreoni-a.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/arbuckle-sa.html</loc>
 <lastmod>2021-01-15T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1560,6 +1672,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/arokiaraj-cm.html</loc>
 <lastmod>2023-05-29T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/artiukhova-m.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1796,6 +1915,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/carlson-el.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/chan-ky.html</loc>
 <lastmod>2023-04-12T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1845,6 +1971,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/chouinard-j.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/christian-bt.html</loc>
 <lastmod>2021-04-08T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1854,6 +1987,20 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/chu-amf.html</loc>
 <lastmod>2019-05-16T12:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/chuapoco-m.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/chuapoco-me.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1894,6 +2041,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/cornwell-b.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/cowen-as.html</loc>
 <lastmod>2023-05-16T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -1924,6 +2078,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/d.html</loc>
 <lastmod>2019-03-28T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/dalagin-r.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1985,6 +2146,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/deyong-ka.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/deyoung-k.html</loc>
 <lastmod>2024-06-07T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2001,6 +2169,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/dhanesh-sivadasan-bindu-ds.html</loc>
 <lastmod>2023-05-29T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/didier-p.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2153,6 +2328,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/flytzanis-n.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/flytzanis-nc.html</loc>
 <lastmod>2023-04-12T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2223,6 +2405,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/french-d.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/french-da.html</loc>
 <lastmod>2023-10-17T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2238,7 +2427,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fudge-j.html</loc>
-<lastmod>2015-04-12T09:37:00-07:53</lastmod>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2314,8 +2503,22 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/goede-n.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/goeden-n.html</loc>
 <lastmod>2023-04-12T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/goersten-d.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2344,6 +2547,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/gore-bb.html</loc>
 <lastmod>2023-05-29T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/gorgans-s.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2482,6 +2692,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/huang-sf.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/hudja-sn.html</loc>
 <lastmod>2018-01-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2519,6 +2736,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/jahn-al.html</loc>
 <lastmod>2010-01-12T12:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/jang-m.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2657,6 +2881,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/kenwood-m.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/kenwood-mm.html</loc>
 <lastmod>2023-10-17T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2757,6 +2988,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/kuhn-m.html</loc>
 <lastmod>2024-06-07T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/kumar-kr.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2895,6 +3133,20 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/man-k-nm.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/man-knm.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/man-nkm.html</loc>
 <lastmod>2023-04-12T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -2967,6 +3219,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/michaelides-m.html</loc>
 <lastmod>2021-04-08T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/miles-tf.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3245,6 +3504,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/pal-a.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/patriat-r.html</loc>
 <lastmod>2012-01-07T12:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -3260,7 +3526,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/pickel-j.html</loc>
-<lastmod>2023-04-12T00:00:00-07:53</lastmod>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3289,6 +3555,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/pizzagalli-da.html</loc>
 <lastmod>2004-01-24T12:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/plattner-v.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3365,7 +3638,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/riedel-m.html</loc>
-<lastmod>2020-05-12T00:00:00-07:53</lastmod>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3406,8 +3679,22 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/roseboom-p.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/roseboom-ph.html</loc>
 <lastmod>2024-01-16T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/roxa-km.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3504,8 +3791,22 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/schumann-c.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/schumann-cm.html</loc>
 <lastmod>2024-11-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/scott-e.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3553,8 +3854,22 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/shackman-as.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/shay-tf.html</loc>
 <lastmod>2023-05-29T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/shaya-t.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3604,6 +3919,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/singh-vp.html</loc>
 <lastmod>2023-04-12T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/sivadasan-bindu-d.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3679,6 +4001,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/author/sullivan-e.html</loc>
+<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/sullivan-ee.html</loc>
 <lastmod>2023-05-29T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -3687,7 +4016,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/sun-j.html</loc>
-<lastmod>2023-04-12T00:00:00-07:53</lastmod>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3729,7 +4058,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/tillman-rm.html</loc>
-<lastmod>2022-01-01T00:00:00-07:53</lastmod>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3744,6 +4073,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/ting-jt.html</loc>
 <lastmod>2023-05-29T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/tjahjono-n.html</loc>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3855,7 +4191,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/vendemiatti-j.html</loc>
-<lastmod>2023-04-12T00:00:00-07:53</lastmod>
+<lastmod>2023-05-01T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
