@@ -5,35 +5,35 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2024-11-07T15:23:46-00:00</lastmod>
+<lastmod>2024-11-07T15:31:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2024-11-07T15:23:46-00:00</lastmod>
+<lastmod>2024-11-07T15:31:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2024-11-07T15:23:46-00:00</lastmod>
+<lastmod>2024-11-07T15:31:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2024-11-07T15:23:46-00:00</lastmod>
+<lastmod>2024-11-07T15:31:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2024-11-07T15:23:46-00:00</lastmod>
+<lastmod>2024-11-07T15:31:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -90,6 +90,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/kamboj-et-al-american-journal-of-psychiatry-2024.html</loc>
 <lastmod>2024-10-03T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/campos-drzewiecki-fox-springer-series-in-behavioral-neuroscience-new-discoveries-in-the-brain-sciences-of-fear-and-anxiety-from-basic-to-clinical-neuroscience-2024.html</loc>
+<lastmod>2024-09-03T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
