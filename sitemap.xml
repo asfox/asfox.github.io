@@ -5,36 +5,57 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2025-05-06T11:36:27-00:00</lastmod>
+<lastmod>2026-04-14T11:26:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2025-05-06T11:36:27-00:00</lastmod>
+<lastmod>2026-04-14T11:26:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2025-05-06T11:36:27-00:00</lastmod>
+<lastmod>2026-04-14T11:26:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2025-05-06T11:36:27-00:00</lastmod>
+<lastmod>2026-04-14T11:26:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2025-05-06T11:36:27-00:00</lastmod>
+<lastmod>2026-04-14T11:26:11-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/ander-et-al-molecular-psychiatry-2025.html</loc>
+<lastmod>2025-12-19T00:00:00-08:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/campos-drzewiecki-fox-springer-series-in-behavioral-neuroscience-new-discoveries-in-the-brain-sciences-of-fear-and-anxiety-from-basic-to-clinical-neuroscience-2025.html</loc>
+<lastmod>2025-10-19T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/holley-fox-neurobehavioral-individual-differences-2025.html</loc>
+<lastmod>2025-05-22T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -104,13 +125,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/kamboj-et-al-american-journal-of-psychiatry-2024.html</loc>
 <lastmod>2024-10-03T00:00:00-07:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>/campos-drzewiecki-fox-springer-series-in-behavioral-neuroscience-new-discoveries-in-the-brain-sciences-of-fear-and-anxiety-from-basic-to-clinical-neuroscience-2024.html</loc>
-<lastmod>2024-09-03T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -286,13 +300,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/rani-purewal.html</loc>
 <lastmod>2022-09-21T00:00:00-07:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>/holley-fox-neurobehavioral-individual-differences-2022.html</loc>
-<lastmod>2022-09-15T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1390,6 +1397,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/davidson-et-al-2007.html</loc>
+<lastmod>2007-01-20T12:00:00-08:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/oakes-et-al-2007.html</loc>
 <lastmod>2007-01-18T12:00:00-08:00</lastmod>
 <changefreq>monthly</changefreq>
@@ -1406,13 +1420,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/fox-sobp-2007.html</loc>
 <lastmod>2007-01-01T12:00:00-08:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>/davidson-et-al-2006.html</loc>
-<lastmod>2006-01-20T12:00:00-08:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1566,7 +1573,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1671,7 +1678,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/ander-bp.html</loc>
-<lastmod>2024-11-01T00:00:00-07:53</lastmod>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1763,6 +1770,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/author/bauman-md.html</loc>
 <lastmod>2024-11-01T00:00:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/author/bauman-md-schumann-cm.html</loc>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1923,7 +1937,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/campos-lj.html</loc>
-<lastmod>2024-11-01T00:00:00-07:53</lastmod>
+<lastmod>2025-10-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1951,7 +1965,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/carlson-el.html</loc>
-<lastmod>2022-05-01T00:00:00-07:53</lastmod>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2266,7 +2280,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/drzewiecki-cm.html</loc>
-<lastmod>2024-11-01T00:00:00-07:53</lastmod>
+<lastmod>2025-10-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2399,7 +2413,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fox-as.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2672,7 +2686,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/hanson-kl.html</loc>
-<lastmod>2024-10-03T00:00:00-07:53</lastmod>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2728,7 +2742,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/holley-d.html</loc>
-<lastmod>2024-06-07T00:00:00-07:53</lastmod>
+<lastmod>2025-05-22T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2875,7 +2889,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/kamboj-s.html</loc>
-<lastmod>2024-11-01T00:00:00-07:53</lastmod>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3351,7 +3365,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/murray-kd.html</loc>
-<lastmod>2024-11-01T00:00:00-07:53</lastmod>
+<lastmod>2025-12-19T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
