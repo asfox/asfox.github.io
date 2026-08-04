@@ -5,42 +5,49 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2026-04-14T13:57:39-00:00</lastmod>
+<lastmod>2026-08-04T16:06:18-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2026-04-14T13:57:39-00:00</lastmod>
+<lastmod>2026-08-04T16:06:18-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2026-04-14T13:57:39-00:00</lastmod>
+<lastmod>2026-08-04T16:06:18-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2026-04-14T13:57:39-00:00</lastmod>
+<lastmod>2026-08-04T16:06:18-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2026-04-14T13:57:39-00:00</lastmod>
+<lastmod>2026-08-04T16:06:18-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/ander-et-al-molecular-psychiatry-2025.html</loc>
-<lastmod>2025-12-19T00:00:00-08:00</lastmod>
+<loc>/ander-et-al-molecular-psychiatry-2026.html</loc>
+<lastmod>2026-05-03T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/didier-et-al-scan-2026.html</loc>
+<lastmod>2026-01-21T00:00:00-08:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1573,7 +1580,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/publications.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1678,7 +1685,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/ander-bp.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1692,7 +1699,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/anderson-as.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1776,7 +1783,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/bauman-md-schumann-cm.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1965,7 +1972,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/carlson-el.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2217,7 +2224,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/deyoung-ka.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2238,7 +2245,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/didier-pr.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2413,7 +2420,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/fox-as.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2665,7 +2672,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/grogans-se.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2686,7 +2693,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/hanson-kl.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2770,7 +2777,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/hur-j.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2784,7 +2791,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/islam-s.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2889,14 +2896,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/kamboj-s.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/author/kaplan-cm.html</loc>
-<lastmod>2023-08-17T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2966,7 +2973,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/kim-hc.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3050,7 +3057,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/kuhn-m.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3365,7 +3372,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/murray-kd.html</loc>
-<lastmod>2025-12-19T00:00:00-07:53</lastmod>
+<lastmod>2026-05-03T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -3911,7 +3918,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/shackman-aj.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -4023,7 +4030,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/smith-jf.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -4128,7 +4135,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/tillman-rm.html</loc>
-<lastmod>2025-04-01T00:00:00-07:53</lastmod>
+<lastmod>2026-01-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
