@@ -5,35 +5,35 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2026-09-24T09:07:50-00:00</lastmod>
+<lastmod>2026-09-24T14:46:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2026-09-24T09:07:50-00:00</lastmod>
+<lastmod>2026-09-24T14:46:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2026-09-24T09:07:50-00:00</lastmod>
+<lastmod>2026-09-24T14:46:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/authors.html</loc>
-<lastmod>2026-09-24T09:07:50-00:00</lastmod>
+<lastmod>2026-09-24T14:46:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2026-09-24T09:07:50-00:00</lastmod>
+<lastmod>2026-09-24T14:46:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -62,6 +62,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/campos-drzewiecki-fox-springer-series-in-behavioral-neuroscience-new-discoveries-in-the-brain-sciences-of-fear-and-anxiety-from-basic-to-clinical-neuroscience-2025.html</loc>
 <lastmod>2025-10-19T00:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/mesude-okhan.html</loc>
+<lastmod>2025-09-21T00:00:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1573,7 +1580,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/people.html</loc>
-<lastmod>2024-04-01T00:00:00-07:53</lastmod>
+<lastmod>2025-09-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -2301,7 +2308,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/drew-fox.html</loc>
-<lastmod>2024-11-01T21:26:00-07:53</lastmod>
+<lastmod>2025-09-21T00:00:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
